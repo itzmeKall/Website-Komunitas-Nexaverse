@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexaVerse - Anime Streaming & Database</title>
+    <link rel="stylesheet" href="cssbersama.css">
+    
+    <style>
+        /* ==========================================================================
+           FIXED TARGETS TRICK (Mencegah Layar Otomatis Scroll / Melompat)
+           ========================================================================== */
+        /* Penjelasan: Elemen anchor (#anime1 s/d #anime5) ini disembunyikan menggunakan 
+           visibility: hidden dan ukurannya dibuat 0 agar tidak merusak tata letak visual.
+           Penggunaan position: fixed di sini sangat krusial; ini adalah trik CSS untuk mencegah 
+           halaman otomatis meloncat (jump/scroll) ke bawah saat pengguna mengklik tombol nav-btn 
+           yang merujuk pada ID target tersebut.
+        */
+        #anime1, #anime2, #anime3, #anime4, #anime5 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 0;
+            width: 0;
+            visibility: hidden;
+        }
+
+        /* ==========================================================================
+           1. STRUKTUR UTAMA SLIDER (SANGAT SENSITIF - JANGAN DIUBAH URUTANNYA)
+           ========================================================================== */
+        /* Penjelasan: .slider-wrapper bertindak sebagai container utama slider. 
+           Properti overflow: hidden memastikan gambar slide yang berada di luar batas lebar layar 
+           tidak akan memunculkan scrollbar horizontal pada browser.
+        */
+        .slider-wrapper {
+            position: relative;
+            width: 100%;
+            background: #161129;
+            border-bottom: 3px solid #ff007f;
+            overflow: hidden;
+        }
+
+        /* Penjelasan: .slider-window bertindak sebagai bingkai pembatas pandangan (viewport) 
+           untuk konten di dalamnya yang berukuran sangat lebar.
+        */
+        
+        .slider-window {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Penjelasan: .slider-content memiliki lebar 500% karena menampung 5 slide sekaligus secara horizontal (5 x 100%).
+           display: flex memaksa seluruh .slide-item berjajar ke samping. 
+           transition: transform 0.5s ease-in-out memberikan efek pergeseran yang halus selama 0.5 detik saat terjadi perubahan transform.
+        */
+        .slider-content {
+            display: flex;
+            width: 500%;
+            /* Animasi geser transisi halus sebesar 0.5 detik */
+            transition: transform 0.5s ease-in-out; 
+        }
+        
+        /* ==========================================================================
+           2. PERBAIKAN UKURAN GAMBAR AGAR PAS & LEBIH RAMPING
+           ========================================================================== */
+        /* Penjelasan: .slide-item diatur memiliki lebar 20% (1/5 dari total lebar .slider-content yang 500%), 
+           sehingga pas memenuhi 100% layar browser. flex-shrink: 0 mencegah item mengerut.
+           background-size: cover memastikan gambar latar belakang memenuhi area tanpa distorsi.
+           display: flex dan align-items: center digunakan untuk menyejajarkan teks dan kotak skor di tengah secara vertikal.
+        */
+        .slide-item {
+            width: 20%;
+            flex-shrink: 0;
+            min-height: 400px; /* Diperkecil dari 550px agar spanduk lebih ramping */
+            box-sizing: border-box;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #161129;
+            position: relative;
+
+            /* Flexbox: Memaksa isi teks & skor sejajar sempurna di tengah secara vertikal */
+            display: flex;
+            align-items: center; 
+            padding: 40px 5%; /* Jarak atas-bawah diturunkan dari 80px ke 40px agar gap mengecil */
+        }
+
+        /* Lapisan Gradasi Kegelapan Otomatis - DIUBAH AGAR LEBIH CERAH */
+        /* Penjelasan: Pseudo-element ::before digunakan untuk membuat lapisan overlay gradasi gelap di atas gambar background. 
+           Hal ini dilakukan agar teks berwarna putih/terang di atasnya tetap mudah dibaca (high contrast) 
+           tanpa menghilangkan detail gambar latar belakang sepenuhnya.
+        */
+        .slide-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(22, 17, 41, 0.7) 40%, rgba(13, 8, 20, 0.3) 100%);
+            z-index: 1;
+        }
+
+        /* Wadah Konten Dalam Slide */
+        /* Penjelasan: .slide-inner membungkus konten teks dan skor di dalam setiap slide. 
+           z-index: 2 memastikan elemen ini berada di atas lapisan gradasi kegelapan (::before yang memiliki z-index 1).
+           display: flex dengan gap: 40px mengatur jarak horizontal antara kotak skor Nexa dan deskripsi anime.
+        */
+        .slide-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center; /* Menyejajarkan Kotak Skor dan Teks secara Horizontal */
+        }
+
+        /* ==========================================================================
+           3. LOGIKA SELEKTOR CSS TARGET (MENJALANKAN ANIMASI GESER)
+           ========================================================================== */
+        /* Penjelasan: Bagian ini adalah inti logika slider non-JavaScript. Ketika elemen anchor (misal #anime2) 
+           menjadi target aktif (melalui URL hashtag pada tombol navigasi), selektor saudara (~/sibling selector) 
+           akan mencari .slider-wrapper lalu menggeser elemen .slider-content ke arah kiri menggunakan translateX.
+           Slide 1 = 0%, Slide 2 = -20% (geser 1 slide), Slide 3 = -40% (geser 2 slide), dst.
+        */
+        #anime1:target ~ .slider-wrapper .slider-window .slider-content { transform: translateX(0); }
+        #anime2:target ~ .slider-wrapper .slider-window .slider-content { transform: translateX(-20%); }
+        #anime3:target ~ .slider-wrapper .slider-window .slider-content { transform: translateX(-40%); }
+        #anime4:target ~ .slider-wrapper .slider-window .slider-content { transform: translateX(-60%); }
+        #anime5:target ~ .slider-wrapper .slider-window .slider-content { transform: translateX(-80%); }
+
+        /* ==========================================================================
+           4. TOMBOL NAVIGASI PANAH (SINKRON & BERURUTAN)
+           ========================================================================== */
+        /* Penjelasan: .nav-btn mengatur gaya visual tombol panah kiri-kanan dengan gaya Cyberpunk/Neon.
+           Secara default disetel display: none; karena tombol panah yang muncul harus dinamis sesuai 
+           slide mana yang sedang aktif saat itu.
+        */
+        .nav-btn {
+            display: none;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(22, 17, 41, 0.85);
+            border: 1px solid #3d1e5a;
+            color: #00f0ff;
+            font-size: 24px;
+            padding: 15px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            z-index: 10;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+        
+        /* Penjelasan: Efek hover memberikan perubahan warna latar belakang menjadi merah muda neon dan memberikan efek bayangan bersinar (glow effect). */
+        .nav-btn:hover { 
+            background: #ff007f; 
+            color: #fff; 
+            border-color: #ff007f; 
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.6);
+        }
+
+        /* Aturan Menampilkan Tombol Navigasi Sesuai Slide yang Sedang Aktif */
+        /* Penjelasan: Menggunakan logika pseudo-class :target. Jika ID anime tertentu sedang aktif, 
+           maka pasang tombol navigasi panah yang spesifik untuk slide tersebut (mengubah display: none menjadi block). 
+           Ini membuat fungsi tombol panah kiri/kanan selalu akurat mengarah ke slide sebelum atau sesudahnya.
+        */
+        #anime1:target ~ .slider-wrapper .slide1-nav { display: block; }
+        #anime2:target ~ .slider-wrapper .slide2-nav { display: block; }
+        #anime3:target ~ .slider-wrapper .slide3-nav { display: block; }
+        #anime4:target ~ .slider-wrapper .slide4-nav { display: block; }
+        #anime5:target ~ .slider-wrapper .slide5-nav { display: block; }
+        
+        /* Default Sesi: Saat pertama kali halaman dibuka (Sebelum ada klik panah) */
+        /* Penjelasan: .btn-default wajib ditampilkan di awal karena saat pertama kali website dimuat, 
+           belum ada kondisi :target yang terpenuhi pada URL. Jika salah satu target anime sudah aktif, 
+           maka .btn-default akan disembunyikan (display: none) dan digantikan oleh class nav spesifik di atas.
+        */
+        .btn-default { display: block; }
+        #anime1:target ~ .slider-wrapper .btn-default,
+        #anime2:target ~ .slider-wrapper .btn-default,
+        #anime3:target ~ .slider-wrapper .btn-default,
+        #anime4:target ~ .slider-wrapper .btn-default,
+        #anime5:target ~ .slider-wrapper .btn-default { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="anime1"></div>
+    <div id="anime2"></div>
+    <div id="anime3"></div>
+    <div id="anime4"></div>
+    <div id="anime5"></div>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">Nexa<span>Verse</span></div>
+            <nav>
+                <ul>
+                    <li><a href="homepage.html">Home</a></li>
+                    <li><a href="animepage.html" class="active">Anime</a></li>
+                    <li><a href="gamerspage.html">Gamers</a></li>
+                    <li><a href="cosplaypage.html">Cosplay</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="slider-wrapper">
+        <div class="slider-window">
+            
+            <a href="#anime5" class="nav-btn btn-default" style="left: 20px;">&#10094;</a>
+            <a href="#anime2" class="nav-btn btn-default" style="right: 20px;">&#10095;</a>
+
+            <a href="#anime5" class="nav-btn slide1-nav" style="left: 20px;">&#10094;</a>
+            <a href="#anime2" class="nav-btn slide1-nav" style="right: 20px;">&#10095;</a>
+            
+            <a href="#anime1" class="nav-btn slide2-nav" style="left: 20px;">&#10094;</a>
+            <a href="#anime3" class="nav-btn slide2-nav" style="right: 20px;">&#10095;</a>
+            
+            <a href="#anime2" class="nav-btn slide3-nav" style="left: 20px;">&#10094;</a>
+            <a href="#anime4" class="nav-btn slide3-nav" style="right: 20px;">&#10095;</a>
+            
+            <a href="#anime3" class="nav-btn slide4-nav" style="left: 20px;">&#10094;</a>
+            <a href="#anime5" class="nav-btn slide4-nav" style="right: 20px;">&#10095;</a>
+            
+            <a href="#anime4" class="nav-btn slide5-nav" style="left: 20px;">&#10094;</a>
+            <a href="#anime1" class="nav-btn slide5-nav" style="right: 20px;">&#10095;</a>
+
+            <div class="slider-content">
+                
+                <div class="slide-item" style="background-image: url('anime/kimetsu no Yaiba.jpg'); background-size: 100% auto; background-position: center center;">
+                    <div class="slide-inner">
+                        <div style="background: rgba(13, 8, 20, 0.85); border: 1px solid #3d1e5a; padding: 25px; border-radius: 8px; text-align: center; min-width: 180px; backdrop-filter: blur(4px);">
+                            <span style="color: #a594b8; font-size: 12px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Nexa Score</span>
+                            <h1 style="font-size: 54px; color: #00f0ff; margin: 10px 0; text-shadow: 0 0 15px rgba(0,240,255,0.4);">9.12</h1>
+                            <span style="color: #ff007f; font-size: 13px; font-weight: bold;">Rank #1 (Summer 2025)</span>
+                        </div>
+                        <div style="flex: 1; min-width: 300px;">
+                            <h2 style="font-size: 36px; color: #fff; margin: 0 0 10px 0; font-weight: bold; text-transform: none;">Kimetsu no Yaiba: Infinity Castle</h2>
+                            <p style="color: #bfaecf; margin: 0 0 20px 0; font-size: 15px; line-height: 1.6;">Muzan Kibutsuji menginvasi markas Korps Pembasmi Iblis. Seluruh pilar dan Tanjiro terjebak ke dalam Kastil Tanpa Batas (Infinity Castle) milik Nakime.</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; font-size: 13px;">
+                                <span style="background: rgba(138, 43, 226, 0.2); border: 1px solid #8a2be2; padding: 6px 12px; border-radius: 4px; color: #fff;">Studio: ufotable</span>
+                                <span style="background: rgba(255, 0, 127, 0.2); border: 1px solid #ff007f; padding: 6px 12px; border-radius: 4px; color: #fff;">Genre: Action, Fantasy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-item" style="background-image: url('anime/DR.Stone.jpg'); background-size: 100% auto; background-position: center center;">
+                    <div class="slide-inner">
+                        <div style="background: rgba(13, 8, 20, 0.85); border: 1px solid #3d1e5a; padding: 25px; border-radius: 8px; text-align: center; min-width: 180px; backdrop-filter: blur(4px);">
+                            <span style="color: #a594b8; font-size: 12px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Nexa Score</span>
+                            <h1 style="font-size: 54px; color: #00f0ff; margin: 10px 0; text-shadow: 0 0 15px rgba(0,240,255,0.4);">8.45</h1>
+                            <span style="color: #ff007f; font-size: 13px; font-weight: bold;">Rank #5 (Spring 2026)</span>
+                        </div>
+                        <div style="flex: 1; min-width: 300px;">
+                            <h2 style="font-size: 36px; color: #fff; margin: 0 0 10px 0; font-weight: bold; text-transform: none;">Dr. STONE: SCIENCE FUTURE Part 3</h2>
+                            <p style="color: #bfaecf; margin: 0 0 20px 0; font-size: 15px; line-height: 1.6;">Seksi final dari petualangan ilmiah Senku. Kerajaan Sains bersiap meluncurkan misi luar angkasa demi memecahkan misteri global pembatuan.</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; font-size: 13px;">
+                                <span style="background: rgba(138, 43, 226, 0.2); border: 1px solid #8a2be2; padding: 6px 12px; border-radius: 4px; color: #fff;">Studio: TMS Entertainment</span>
+                                <span style="background: rgba(255, 0, 127, 0.2); border: 1px solid #ff007f; padding: 6px 12px; border-radius: 4px; color: #fff;">Genre: Sci-Fi, Adventure</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-item" style="background-image: url('anime/Tensura.jpg'); background-size: 100% auto; background-position: center center;">
+                    <div class="slide-inner">
+                        <div style="background: rgba(13, 8, 20, 0.85); border: 1px solid #3d1e5a; padding: 25px; border-radius: 8px; text-align: center; min-width: 180px; backdrop-filter: blur(4px);">
+                            <span style="color: #a594b8; font-size: 12px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Nexa Score</span>
+                            <h1 style="font-size: 54px; color: #00f0ff; margin: 10px 0; text-shadow: 0 0 15px rgba(0,240,255,0.4);">8.72</h1>
+                            <span style="color: #ff007f; font-size: 13px; font-weight: bold;">Rank #4 (Spring 2026)</span>
+                        </div>
+                        <div style="flex: 1; min-width: 300px;">
+                            <h2 style="font-size: 36px; color: #fff; margin: 0 0 10px 0; font-weight: bold; text-transform: none;">Tensei Shitara Slime Datta Ken 4th Season</h2>
+                            <p style="color: #bfaecf; margin: 0 0 20px 0; font-size: 15px; line-height: 1.6;">Kelanjutan kisah Rimuru Tempest mengelola kekaisaran Jura Tempest pasca turnamen besar, bersiap menghadapi ancaman baru dari faksi barat.</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; font-size: 13px;">
+                                <span style="background: rgba(138, 43, 226, 0.2); border: 1px solid #8a2be2; padding: 6px 12px; border-radius: 4px; color: #fff;">Studio: 8bit</span>
+                                <span style="background: rgba(255, 0, 127, 0.2); border: 1px solid #ff007f; padding: 6px 12px; border-radius: 4px; color: #fff;">Genre: Fantasy, Isekai</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-item" style="background-image: url('anime/Classroom Elite.jpg'); background-size: 100% auto; background-position: center center;">
+                    <div class="slide-inner">
+                        <div style="background: rgba(13, 8, 20, 0.85); border: 1px solid #3d1e5a; padding: 25px; border-radius: 8px; text-align: center; min-width: 180px; backdrop-filter: blur(4px);">
+                            <span style="color: #a594b8; font-size: 12px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Nexa Score</span>
+                            <h1 style="font-size: 54px; color: #00f0ff; margin: 10px 0; text-shadow: 0 0 15px rgba(0,240,255,0.4);">8.21</h1>
+                            <span style="color: #ff007f; font-size: 13px; font-weight: bold;">Rank #8 (Spring 2026)</span>
+                        </div>
+                        <div style="flex: 1; min-width: 300px;">
+                            <h2 style="font-size: 36px; color: #fff; margin: 0 0 10px 0; font-weight: bold; text-transform: none;">Classroom of the Elite 4th Season</h2>
+                            <p style="color: #bfaecf; margin: 0 0 20px 0; font-size: 15px; line-height: 1.6;">Memasuki busur cerita tahun kedua (2nd Year Arc). Kiyotaka Ayanokouji menghadapi tantangan baru dan ujian khusus yang jauh lebih kejam.</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; font-size: 13px;">
+                                <span style="background: rgba(138, 43, 226, 0.2); border: 1px solid #8a2be2; padding: 6px 12px; border-radius: 4px; color: #fff;">Studio: Lerche</span>
+                                <span style="background: rgba(255, 0, 127, 0.2); border: 1px solid #ff007f; padding: 6px 12px; border-radius: 4px; color: #fff;">Genre: Drama, Suspense</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-item" style="background-image: url('anime/One Piece.jpg'); background-size: 100% auto; background-position: center center;">
+                    <div class="slide-inner">
+                        <div style="background: rgba(13, 8, 20, 0.85); border: 1px solid #3d1e5a; padding: 25px; border-radius: 8px; text-align: center; min-width: 180px; backdrop-filter: blur(4px);">
+                            <span style="color: #a594b8; font-size: 12px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Nexa Score</span>
+                            <h1 style="font-size: 54px; color: #00f0ff; margin: 10px 0; text-shadow: 0 0 15px rgba(0,240,255,0.4);">8.95</h1>
+                            <span style="color: #ff007f; font-size: 13px; font-weight: bold;">Rank #3 (All-Time)</span>
+                        </div>
+                        <div style="flex: 1; min-width: 300px;">
+                            <h2 style="font-size: 36px; color: #fff; margin: 0 0 10px 0; font-weight: bold; text-transform: none;">ONE PIECE (Egghead Arc)</h2>
+                            <p style="color: #bfaecf; margin: 0 0 20px 0; font-size: 15px; line-height: 1.6;">Pertempuran di Pulau Masa Depan mencapai puncaknya. Kebenaran mengejutkan tentang Abad Kekosongan disiarkan ke seluruh dunia.</p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; font-size: 13px;">
+                                <span style="background: rgba(138, 43, 226, 0.2); border: 1px solid #8a2be2; padding: 6px 12px; border-radius: 4px; color: #fff;">Studio: Toei Animation</span>
+                                <span style="background: rgba(255, 0, 127, 0.2); border: 1px solid #ff007f; padding: 6px 12px; border-radius: 4px; color: #fff;">Genre: Action, Adventure</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div class="container" style="margin-top: 40px; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="font-size: 16px; font-weight: bold; letter-spacing: 1px; color: #bfaecf; text-transform: uppercase; margin: 0;">Trending Now</h2>
+            <a href="#" style="font-size: 13px; color: #a594b8; text-decoration: none;">View All</a>
+        </div>
+        <div class="card-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; justify-content: space-between;">
+            
+            <div class="card" style="width: 100%; background: transparent; border: none;">
+                <div class="card-img" style="height: 270px; border-radius: 6px; background-image: url('anime/DR.Stone Cards.jpg'); background-size: cover; background-position: center; position: relative;">
+                    <div style="position: absolute; top: 10px; left: 10px; background: #ff007f; color: #fff; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 8px rgba(255, 0, 127, 0.4);">EP 13</div>
+                </div>
+                <div class="card-content" style="padding: 10px 0 0 0;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px; font-size: 13px; color: #ffca28; font-weight: bold;"><span>★</span> 8.45</div>
+                    <h3 style="font-size: 14px; color: #f0f0f0; margin:0;">Dr. STONE: SCIENCE FUTURE Part 3</h3>
+                </div>
+            </div>
+            
+            <div class="card" style="width: 100%; background: transparent; border: none;">
+                <div class="card-img" style="height: 270px; border-radius: 6px; background-image: url('anime/Tensura Cards.jpg'); background-size: cover; background-position: center; position: relative;">
+                    <div style="position: absolute; top: 10px; left: 10px; background: #ff007f; color: #fff; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 8px rgba(255, 0, 127, 0.4);">EP 13</div>
+                </div>
+                <div class="card-content" style="padding: 10px 0 0 0;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px; font-size: 13px; color: #ffca28; font-weight: bold;"><span>★</span> 8.72</div>
+                    <h3 style="font-size: 14px; color: #f0f0f0; margin:0;">Tensei Shitara Slime Datta Ken 4th Season</h3>
+                </div>
+            </div>
+            
+            <div class="card" style="width: 100%; background: transparent; border: none;">
+                <div class="card-img" style="height: 270px; border-radius: 6px; background-image: url('anime/Wistoria Cards.jpg'); background-size: cover; background-position: center; position: relative;">
+                    <div style="position: absolute; top: 10px; left: 10px; background: #ff007f; color: #fff; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 8px rgba(255, 0, 127, 0.4);">EP 12</div>
+                </div>
+                <div class="card-content" style="padding: 10px 0 0 0;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px; font-size: 13px; color: #ffca28; font-weight: bold;"><span>★</span> 8.25</div>
+                    <h3 style="font-size: 14px; color: #f0f0f0; margin:0;">Tsue to Tsurugi no Wistoria Season 2</h3>
+                </div>
+            </div>
+            
+            <div class="card" style="width: 100%; background: transparent; border: none;">
+                <div class="card-img" style="height: 270px; border-radius: 6px; background-image: url('anime/Class de 2 banme ni kawaii Cards.jpg'); background-size: cover; background-position: center; position: relative;">
+                    <div style="position: absolute; top: 10px; left: 10px; background: #ff007f; color: #fff; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 8px rgba(255, 0, 127, 0.4);">EP 12</div>
+                </div>
+                <div class="card-content" style="padding: 10px 0 0 0;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px; font-size: 13px; color: #ffca28; font-weight: bold;"><span>★</span> 8.15</div>
+                    <h3 style="font-size: 14px; color: #f0f0f0; margin:0;">Class de 2-banme ni Kawaii Onnanoko to Tomodachi ni Natta</h3>
+                </div>
+            </div>
+            
+            <div class="card" style="width: 100%; background: transparent; border: none;">
+                <div class="card-img" style="height: 270px; border-radius: 6px; background-image: url('anime/Otonari Tenshi Cards.jpg'); background-size: cover; background-position: center; position: relative;">
+                    <div style="position: absolute; top: 10px; left: 10px; background: #ff007f; color: #fff; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 8px rgba(255, 0, 127, 0.4);">EP 12</div>
+                </div>
+                <div class="card-content" style="padding: 10px 0 0 0;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px; font-size: 13px; color: #ffca28; font-weight: bold;"><span>★</span> 8.05</div>
+                    <h3 style="font-size: 14px; color: #f0f0f0; margin:0;">Otonari no Tenshi-sama ni Itsunomanika Dame Ningen ni Sareteita Ken 2</h3>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container" style="margin-top: 40px; margin-bottom: 80px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="font-size: 16px; font-weight: bold; letter-spacing: 1px; color: #bfaecf; text-transform: uppercase; margin: 0;">Popular This Season</h2>
+            <a href="#" style="font-size: 13px; color: #a594b8; text-decoration: none;">View All</a>
+        </div>
+        <div class="card-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; justify-content: space-between;">
+            
+            <div class="card" style="width: 100%; background: transparent; border: none;">
+                <div class="card-img" style="height: 270px; border-radius: 6px; background-image: url('anime/Re Zero Cards.jpg'); background-size: cover; background-position: center; position: relative;">
+                    <div style="position: absolute; top: 10px; left: 10px; background: #ff007f; color: #fff; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 8px rgba(255, 0, 127, 0.4);">EP 19</div>
+                </div>
+                <div class="card-content" style="padding: 10px 0 0 0;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px; font-size: 13px; color: #ffca28; font-weight: bold;"><span>★</span> 8.82</div>
+                    <h3 style="font-size: 14px; color: #f0f0f0; margin:0;">Re:Zero kara Hajimeru Isekai Seikatsu 4th Season</h3>
+                </div>
+            </div>
+            
+            <div class="card" style="width: 100%; background: transparent; border: none;">
+                <div class="card-img" style="height: 270px; border-radius: 6px; background-image: url('anime/Classroom Elite Cards.jpg'); background-size: cover; background-position: center; position: relative;">
+                    <div style="position: absolute; top: 10px; left: 10px; background: #ff007f; color: #fff; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 8px rgba(255, 0, 127, 0.4);">EP 13</div>
+                </div>
+                <div class="card-content" style="padding: 10px 0 0 0;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px; font-size: 13px; color: #ffca28; font-weight: bold;"><span>★</span> 8.21</div>
+                    <h3 style="font-size: 14px; color: #f0f0f0; margin:0;">Classroom of the Elite 4th Season</h3>
+                </div>
+            </div>
+            
+            <div class="card" style="width: 100%; background: transparent; border: none;">
+                <div class="card-img" style="height: 270px; border-radius: 6px; background-image: url('anime/OtaGal Cards.jpg'); background-size: cover; background-position: center; position: relative;">
+                    <div style="position: absolute; top: 10px; left: 10px; background: #ff007f; color: #fff; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 8px rgba(255, 0, 127, 0.4);">EP 12</div>
+                </div>
+                <div class="card-content" style="padding: 10px 0 0 0;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px; font-size: 13px; color: #ffca28; font-weight: bold;"><span>★</span> 8.10</div>
+                    <h3 style="font-size: 14px; color: #f0f0f0; margin:0;">Otaku ni Yasashii Gal wa Inai!?</h3>
+                </div>
+            </div>
+            
+            <div class="card" style="width: 100%; background: transparent; border: none;">
+                <div class="card-img" style="height: 270px; border-radius: 6px; background-image: url('anime/Marriage Toxin Cards.jpg'); background-size: cover; background-position: center; position: relative;">
+                    <div style="position: absolute; top: 10px; left: 10px; background: #ff007f; color: #fff; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 8px rgba(255, 0, 127, 0.4);">EP 13</div>
+                </div>
+                <div class="card-content" style="padding: 10px 0 0 0;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px; font-size: 13px; color: #ffca28; font-weight: bold;"><span>★</span> 7.54</div>
+                    <h3 style="font-size: 14px; color: #f0f0f0; margin:0;">Marriagetoxin</h3>
+                </div>
+            </div>
+            
+            <div class="card" style="width: 100%; background: transparent; border: none;">
+                <div class="card-img" style="height: 270px; border-radius: 6px; background-image: url('anime/Kanokari Cards.jpg'); background-size: cover; background-position: center; position: relative;">
+                    <div style="position: absolute; top: 10px; left: 10px; background: #ff007f; color: #fff; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 4px; box-shadow: 0 2px 8px rgba(255, 0, 127, 0.4);">EP 12</div>
+                </div>
+                <div class="card-content" style="padding: 10px 0 0 0;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px; font-size: 13px; color: #ffca28; font-weight: bold;"><span>★</span> 6.05</div>
+                    <h3 style="font-size: 14px; color: #f0f0f0; margin:0;">Kanojo, Okarishimasu 5th Season</h3>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container" style="margin-top: 80px; margin-bottom: 80px; max-width: 1200px; margin-left: auto; margin-right: auto; padding: 0 20px;">
+        <div style="border-bottom: 2px solid #3d1e5a; padding-bottom: 15px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px;">
+            <h2 style="font-size: 20px; font-weight: bold; letter-spacing: 1px; color: #fff; text-transform: uppercase; margin: 0;">
+                Diskusi <span style="color: #ff007f;">NexaVerse</span>
+            </h2>
+            <span style="background: rgba(0, 240, 255, 0.1); border: 1px solid #00f0ff; color: #00f0ff; font-size: 12px; font-weight: bold; padding: 3px 10px; border-radius: 20px;">
+                3 Komentar
+            </span>
+        </div>
+
+        <div style="background: rgba(22, 17, 41, 0.6); border: 1px solid #3d1e5a; border-radius: 8px; padding: 20px; margin-bottom: 40px; backdrop-filter: blur(4px);">
+            <form action="#" onsubmit="event.preventDefault();" style="display: flex; flex-direction: column; gap: 15px;">
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <input type="text" placeholder="Nama panggilan kamu..." required 
+                        style="flex: 1; min-width: 250px; background: #0d0814; border: 1px solid #3d1e5a; border-radius: 4px; padding: 12px; color: #fff; font-size: 14px; outline: none;">
+                    <input type="email" placeholder="Email (tidak akan ditampilkan)..." required 
+                        style="flex: 1; min-width: 250px; background: #0d0814; border: 1px solid #3d1e5a; border-radius: 4px; padding: 12px; color: #fff; font-size: 14px; outline: none;">
+                </div>
+                <textarea rows="4" placeholder="Tulis pendapatmu tentang anime musim ini..." required 
+                    style="width: 100%; box-sizing: border-box; background: #0d0814; border: 1px solid #3d1e5a; border-radius: 4px; padding: 12px; color: #fff; font-size: 14px; outline: none; resize: vertical;"></textarea>
+                
+                <div style="display: flex; justify-content: flex-end;">
+                    <button type="submit" 
+                        style="background: #ff007f; color: #fff; border: none; padding: 12px 28px; font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.2s ease; box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);">
+                        Kirim Komentar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Daftar Komentar (Daftar Diskusi) -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            
+            <!-- Komentar 1 -->
+            <div style="display: flex; gap: 15px; background: rgba(13, 8, 20, 0.4); border-left: 4px solid #ff007f; padding: 15px; border-radius: 0 8px 8px 0;">
+                <!-- Avatar Sementara (Inisial Nama) -->
+                <div style="width: 45px; height: 45px; background: #ff007f; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; font-size: 16px;">
+                    R
+                </div>
+                <div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px; flex-wrap: wrap;">
+                        <h4 style="margin: 0; color: #fff; font-size: 15px; font-weight: bold;">Rian_WibuAesthetic</h4>
+                        <span style="color: #00f0ff; font-size: 11px; background: rgba(0, 240, 255, 0.1); padding: 2px 6px; border-radius: 3px; border: 1px solid rgba(0, 240, 255, 0.2);">User</span>
+                        <span style="color: #a594b8; font-size: 12px;">• 2 jam yang lalu</span>
+                    </div>
+                    <p style="margin: 0; color: #bfaecf; font-size: 14px; line-height: 1.5;">
+                        Gak sabar nunggu kelanjutan Infinity Castle Arc! Ufotable kalau ngeanimasiin bener-bener gak pernah ngecewain grafiknya. Nexa score 9.12 emang layak banget sih.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Komentar 2 -->
+            <div style="display: flex; gap: 15px; background: rgba(13, 8, 20, 0.4); border-left: 4px solid #00f0ff; padding: 15px; border-radius: 0 8px 8px 0;">
+                <div style="width: 45px; height: 45px; background: #00f0ff; color: #0d0814; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; font-size: 16px;">
+                    S
+                </div>
+                <div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px; flex-wrap: wrap;">
+                        <h4 style="margin: 0; color: #fff; font-size: 15px; font-weight: bold;">Senku_Stan</h4>
+                        <span style="color: #ff007f; font-size: 11px; background: rgba(255, 0, 127, 0.1); padding: 2px 6px; border-radius: 3px; border: 1px solid rgba(255, 0, 127, 0.2);">Pro Moderator</span>
+                        <span style="color: #a594b8; font-size: 12px;">• 5 jam yang lalu</span>
+                    </div>
+                    <p style="margin: 0; color: #bfaecf; font-size: 14px; line-height: 1.5;">
+                        Dr. Stone final season bagian ketiga ini emang seru parah, rute menuju luar angkasanya bener-bener bikin tegang. 1000% seru! Desain card barunya mantep, ada indikator episodenya sekarang jadi gampang mantau.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Komentar 3 -->
+            <div style="display: flex; gap: 15px; background: rgba(13, 8, 20, 0.4); border-left: 4px solid #ff007f; padding: 15px; border-radius: 0 8px 8px 0; margin-left: 40px; border-top-left-radius: 0;">
+                <!-- Contoh Balasan Komentar (Reply) -->
+                <div style="width: 40px; height: 40px; background: #a594b8; color: #161129; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; font-size: 14px;">
+                    M
+                </div>
+                <div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px; flex-wrap: wrap;">
+                        <h4 style="margin: 0; color: #fff; font-size: 14px; font-weight: bold;">Megumi_09</h4>
+                        <span style="color: #a594b8; font-size: 12px;">• 3 jam yang lalu</span>
+                    </div>
+                    <p style="margin: 0; color: #bfaecf; font-size: 14px; line-height: 1.5;">
+                        Setuju bang! Luar angkasa emang puncak dari segala eksperimen sainsnya Senku.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 <span>NexaVerse</span> Community. AnimeVerse Section.</p>
+    </footer>
+
+</body>
+</html>

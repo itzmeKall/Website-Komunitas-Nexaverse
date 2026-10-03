@@ -1,0 +1,686 @@
+* {
+            box-sizing: border-box; /* Mengubah kalkulasi box model agar padding dan border masuk dalam hitungan total lebar/tinggi elemen */
+            margin: 0;             /* Menghapus margin bawaan (default) dari seluruh browser agar layout menempel rapi */
+            padding: 0;            /* Menghapus padding bawaan dari seluruh elemen browser */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Menentukan hierarki jenis font modern yang digunakan di seluruh web */
+        }
+
+        body {
+            background-color: #0d0814; /* Mengatur warna latar belakang halaman menjadi ungu gelap pekat (Cyberpunk tone) */
+            color: #f0f0f0;            /* Mengatur warna teks utama menjadi putih pudar agar tidak terlalu mencolok di mata */
+            line-height: 1.6;          /* Mengatur jarak antar baris teks sebesar 1.6 kali ukuran font agar nyaman dibaca */
+            overflow-x: hidden;        /* Menyembunyikan komponen yang keluar dari batas lebar layar untuk mencegah scroll horizontal yang merusak layout */
+        }
+
+        /* ==================================================================
+           2. HEADER & NAVIGASI (MENU UTAMA)
+           ================================================================== */
+
+        header {
+            background: linear-gradient(135deg, #150a21 0%, #08020f 100%); /* Membuat latar belakang gradasi miring dari ungu tua ke hitam */
+            border-bottom: 2px solid #ff007f; /* Membuat garis pembatas bawah berwarna pink neon */
+            padding: 15px 5%;                 /* Memberikan jarak vertikal 15px di dalam header dan jarak horizontal 5% di sisi kiri dan kanan */
+            position: sticky;                 /* Membuat header tetap melayang (fixed) ketika discroll */
+            top: 0;                           /* Mengunci posisi melayang tepat di bagian paling atas layar browser */
+            z-index: 1000;                    /* Memastikan posisi header selalu berada di lapisan paling atas menimpa konten lainnya */
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.3); /* Memberikan efek bayangan bercahaya (glow effect) berwarna pink tipis di bawah header */
+        }
+
+        .nav-container {
+            display: flex;                   /* Mengaktifkan sistem Flexbox untuk mengatur tata letak komponen di dalamnya */
+            justify-content: space-between;  /* Membagi posisi secara otomatis: Logo di ujung kiri, menu navigasi di ujung kanan */
+            align-items: center;             /* Menyejajarkan logo dan menu secara vertikal agar lurus di tengah-tengah */
+        }
+
+        .logo {
+            font-size: 24px;                 /* Mengatur ukuran huruf logo sebesar 24 piksel */
+            font-weight: 800;                /* Membuat ketebalan huruf logo menjadi sangat tebal (Extra Bold) */
+            color: #00f0ff;                  /* Mengubah warna teks dasar logo menjadi biru neon (Cyan) */
+            text-transform: uppercase;       /* Memaksa semua huruf teks logo menjadi huruf kapital/besar */
+            letter-spacing: 2px;             /* Memberikan jarak renggang antaranak huruf sebesar 2 piksel agar estetik */
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.6); /* Memberikan efek pendar cahaya lampu neon biru pada teks logo */
+        }
+
+        .logo span {
+            color: #ff007f;                  /* Mengubah warna teks khusus di dalam tag span logo menjadi pink neon */
+            text-shadow: 0 0 8px rgba(255, 0, 127, 0.6); /* Memberikan efek neon pink khusus pada kata di dalam span tersebut */
+        }
+
+        nav ul {
+            list-style: none;                /* Menghilangkan tanda titik (bullet points) default dari daftar list menu */
+            display: flex;                   /* Mengaktifkan susunan Flexbox agar item menu berjejer horizontal ke samping */
+            gap: 25px;                       /* Memberikan jarak pemisah yang konsisten sebesar 25 piksel antar item menu */
+            align-items: center;             /* Menyelaraskan seluruh item list secara vertikal di tengah */
+        }
+
+        nav ul li a {
+            color: #f0f0f0;                  /* Mengatur warna teks link menu menjadi putih pudar */
+            text-decoration: none;           /* Menghilangkan garis bawah default pada tautan/link */
+            font-weight: 600;                /* Mengatur ketebalan font menu menjadi semi-bold */
+            font-size: 16px;                 /* Mengatur ukuran teks link sebesar 16 piksel */
+            text-transform: uppercase;       /* Mengubah semua teks menu menjadi huruf kapital */
+            transition: all 0.3s ease;       /* Menambahkan efek animasi halus selama 0.3 detik saat terjadi interaksi */
+            padding: 8px 16px;               /* Memberikan ruang klik di dalam menu sebesar 8px atas-bawah dan 16px kiri-kanan */
+            border-radius: 4px;              /* Membulatkan sudut luar sudut area menu sebesar 4 piksel */
+        }
+
+        /* Mengatur kondisi ketika menu disorot kursor (hover) ATAU ketika menu memiliki class active */
+        nav ul li a:hover, nav ul li a.active {
+            color: #fff;                     /* Mengubah warna teks menu menjadi putih bersih */
+            background: rgba(255, 0, 127, 0.2); /* Memberikan warna latar belakang transparan pink neon tipis */
+            box-shadow: inset 0 0 8px rgba(255, 0, 127, 0.5); /* Memberikan efek pendar cahaya neon pink ke arah dalam tombol */
+            border-bottom: 2px solid #ff007f; /* Menambahkan garis aksen tebal berwarna pink di bawah menu yang aktif/disorot */
+        }
+
+        /* ==================================================================
+           3. HERO BANNER SECTION
+           ================================================================== */
+
+        .hero {
+            padding: 80px 5%;                /* Memberikan ruang dalam: 80px atas-bawah dan 5% di sisi kiri-kanan */
+            text-align: center;              /* Mengatur agar semua konten (judul, teks, tombol) berada tepat di tengah */
+            /* Menggabungkan lapisan gradasi hitam transparan dengan gambar background dari Unsplash */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)), 
+                              url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=1920'); 
+            background-size: cover;          /* Memaksa gambar background menutupi seluruh area hero tanpa terdistorsi */
+            background-position: center;     /* Memfokuskan tampilan gambar tepat di tengah bingkai */
+            background-repeat: no-repeat;    /* Mencegah gambar mengulang (looping) jika area layar terlalu besar */
+            color: #ffffff;                  /* Mengubah warna teks di dalam hero menjadi putih */
+            border-bottom: 1px solid rgba(138, 43, 226, 0.3); /* Membuat garis batas bawah tipis transparan berwarna ungu violet */
+        }
+
+        .hero h1 {
+            font-size: 48px;                 /* Mengatur ukuran font judul utama menjadi sangat besar (48px) */
+            margin-bottom: 20px;             /* Memberikan jarak pemisah sebesar 20px di bawah judul */
+            text-transform: uppercase;       /* Mengubah seluruh huruf judul menjadi huruf kapital */
+            letter-spacing: 3px;             /* Meregangkan jarak antarhuruf judul sebesar 3px */
+            color: #fff;                     /* Memastikan teks berwarna putih bersih */
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.8); /* Memberikan aura cahaya mistis berwarna ungu violet pada judul */
+        }
+
+        .hero p {
+            font-size: 18px;                 /* Mengatur ukuran huruf paragraf deskripsi hero sebesar 18px */
+            max-width: 700px;                /* Membatasi lebar teks maksimal 700px agar tidak memanjang penuh dan melelahkan dibaca */
+            margin: 0 auto 30px auto;        /* Menggunakan teknik 'auto' kiri-kanan untuk menaruh paragraf di tengah, dan memberi jarak bawah 30px */
+            color: #bfaecf;                  /* Mengubah warna teks deskripsi menjadi ungu abu-abu pastel lembut */
+        }
+
+        /* Komponen Tombol Universal (.btn) */
+        .btn {
+            display: inline-block;           /* Mengubah sifat elemen tautan agar bisa diberikan manipulasi tinggi, lebar, dan padding */
+            padding: 12px 30px;              /* Mengatur ketebalan dalam tombol: 12px atas-bawah dan 30px kiri-kanan */
+            background: linear-gradient(45deg, #ff007f, #8a2be2); /* Memberikan warna latar tombol gradasi futuristik 45 derajat dari pink ke violet */
+            color: #fff;                     /* Mengatur warna teks di dalam tombol menjadi putih */
+            text-decoration: none;           /* Menghilangkan garis bawah default pada link */
+            font-weight: bold;               /* Membuat cetakan teks tombol menjadi tebal */
+            text-transform: uppercase;       /* Mengubah teks tombol menjadi huruf kapital semua */
+            border-radius: 30px;             /* Membuat sudut tombol melengkung sempurna (bentuk kapsul) */
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); /* Memberikan efek bayangan neon pink di sekeliling tombol */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Menyediakan transisi efek gerak dan bayangan saat tombol berinteraksi */
+            text-align: center;              /* Memastikan teks tombol berada di posisi tengah */
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);     /* Memberikan efek animasi mengangkat tombol ke atas sebesar 3 piksel saat didekati kursor */
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.6); /* Mengubah warna bayangan menjadi biru cyan berpendar lebih terang saat hover */
+        }
+
+        /* ==================================================================
+           4. MAIN LAYOUT CONTAINER & CARDS (ZONA PILIHAN)
+           ================================================================== */
+
+        .container {
+            max-width: 1200px;               /* Membatasi lebar maksimal konten di dalam halaman agar tidak meluber pada layar monitor lebar */
+            margin: 40px auto;               /* Memberikan jarak luar 40px atas-bawah, dan memosisikan kontainer di tengah secara otomatis */
+            padding: 0 20px;                 /* Memberikan bantalan kaki kiri-kanan sebesar 20px agar konten tidak menempel ke tepi layar hp */
+        }
+
+        .section-title {
+            font-size: 32px;                 /* Mengatur ukuran huruf judul sub-bagian sebesar 32px */
+            text-transform: uppercase;       /* Mengubah teks judul menjadi huruf kapital */
+            margin-bottom: 30px;             /* Memberikan ruang jarak di bawah judul sebesar 30px */
+            text-align: center;              /* Menaruh posisi teks judul tepat di tengah */
+            color: #00f0ff;                  /* Mengubah warna teks judul menjadi biru cyan neon */
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.4); /* Memberikan efek cahaya tipis biru di belakang judul */
+            position: relative;              /* Mengatur posisi relatif agar bisa menjadi jangkar/patokan untuk garis dekorasi di bawahnya (::after) */
+        }
+
+        /* Membuat elemen dekoratif berupa garis bawah khusus menggunakan pseudo-element */
+        .section-title::after {
+            content: '';                     /* Wajib diisi kosong agar pseudo-element dapat digambar dan muncul di browser */
+            display: block;                  /* Mengubah sifat elemen menjadi block agar dapat diatur ukuran panjang dan tingginya */
+            width: 60px;                     /* Menentukan panjang garis dekorasi sebesar 60 piksel */
+            height: 4px;                     /* Menentukan ketebalan garis dekorasi sebesar 4 piksel */
+            background: #ff007f;             /* Mewarnai garis dekorasi bawah dengan warna pink neon */
+            margin: 10px auto 0 auto;        /* Mengatur jarak atas garis 10px, auto kiri-kanan agar garis berada tepat di tengah bawah judul */
+            border-radius: 2px;              /* Membuat ujung-ujung garis dekorasi menjadi agak tumpul/membulat */
+        }
+
+        .card-container {
+            display: flex;                   /* Mengaktifkan susunan Flexbox pada pembungkus kartu */
+            flex-wrap: wrap;                 /* Mengizinkan kartu untuk turun otomatis ke baris baru jika layar mengecil (Responsif) */
+            gap: 30px;                       /* Memberikan jarak renggang konstan sebesar 30px antar kartu */
+            justify-content: center;         /* Menaruh susunan seluruh kartu agar berkumpul di tengah kontainer */
+        }
+
+        .card {
+            background: #160f24;             /* Mewarnai latar belakang kartu dengan warna ungu gelap sekunder */
+            border: 1px solid #3d1e5a;       /* Memberikan garis border tipis di sekeliling kartu berwarna ungu tua */
+            border-radius: 12px;             /* Membulatkan keempat sudut ujung kartu sebesar 12 piksel */
+            overflow: hidden;                /* Memotong konten atau gambar yang keluar dari batas lengkungan sudut kartu */
+            width: 340px;                    /* Mengunci lebar masing-masing kartu secara presisi sebesar 340 piksel */
+            transition: all 0.3s ease;       /* Mengaktifkan transisi animasi responsif berdurasi 0.3 detik untuk seluruh perubahan style */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5); /* Memberikan bayangan hitam pekat di bawah kartu untuk efek kedalaman (3D effect) */
+        }
+
+        .card:hover {
+            transform: translateY(-10px);    /* Memberikan efek visual kartu melompat ke atas sejauh 10px saat diarahkan kursor */
+            border-color: #ff007f;           /* Mengubah warna garis tepi kartu menjadi pink neon saat di-hover */
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3); /* Mengubah bayangan bawah menjadi pendaran cahaya pink neon tipis */
+        }
+
+        .card-img {
+            height: 200px;                   /* Mengunci tinggi bingkai foto di dalam kartu sebesar 200 piksel */
+            background-size: cover;          /* Memaksa gambar background kartu proporsional mengisi seluruh bingkai */
+            background-position: center;     /* Memfokuskan tampilan gambar tepat di tengah bingkai */
+            position: relative;              /* Mengatur posisi relatif agar lencana/badge di dalamnya dapat dipasang dengan absolut */
+            border-top-left-radius: 8px;     /* Menyelaraskan lengkungan gambar sisi kiri atas dengan ujung kartu */
+            border-top-right-radius: 8px;    /* Menyelaraskan lengkungan gambar sisi kanan atas dengan ujung kartu */
+        }
+
+        /* Penghubung Link Gambar Latar Belakang Kartu dari Unsplash */
+        .img-anime-1 { background-image: url('https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=600'); }
+        .img-game-2 { background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=600'); }
+        .img-cos-1 { background-image: url('https://images.unsplash.com/photo-1503899036084-c55cdd92da26?q=80&w=600'); }
+
+        .card-badge {
+            position: absolute;              /* Membebaskan posisi elemen dari urutan layout agar bisa ditempel manual */
+            top: 15px;                       /* Menempelkan badge berjarak 15 piksel dari atas batas gambar */
+            left: 15px;                      /* Menempelkan badge berjarak 15 piksel dari kiri batas gambar */
+            padding: 5px 12px;               /* Memberikan ruang ketebalan badge: 5px atas-bawah dan 12px kiri-kanan */
+            background: #ff007f;             /* Mewarnai latar belakang lencana (badge) dengan warna pink murni */
+            font-size: 12px;                 /* Mengatur ukuran huruf teks badge sekecil 12px */
+            font-weight: bold;               /* Membuat tulisan teks pada badge tercetak tebal */
+            text-transform: uppercase;       /* Mengubah tulisan teks badge menjadi huruf kapital */
+            border-radius: 4px;              /* Membulatkan sudut tajam kotak badge sebanyak 4 piksel */
+        }
+
+        .card-content { 
+            padding: 20px;                   /* Memberikan ruang jarak dalam sebesar 20px di sekeliling teks konten kartu */
+        }
+        
+        .card-content h3 { 
+            margin-bottom: 10px;             /* Memberikan jarak renggang di bawah judul kartu sebesar 10px */
+            color: #fff;                     /* Mengubah warna teks judul kartu menjadi putih bersih */
+            font-size: 20px;                 /* Mengatur ukuran teks judul kartu sebesar 20px */
+        }
+        
+        .card-content p { 
+            color: #a594b8;                  /* Mengubah warna paragraf di dalam kartu menjadi ungu lembut pudar */
+            font-size: 14px;                 /* Mengatur ukuran teks paragraf dalam kartu sebesar 14px */
+            margin-bottom: 15px;             /* Memberikan jarak pemisah 15px di bawah teks sebelum tombol */
+        }
+
+        /* ==================================================================
+           5. SPLIT SECTION LAYOUT (INFO DUA KOLOM)
+           ================================================================== */
+
+        .split-section {
+            display: flex;                   /* Menata layout menggunakan Flexbox agar teks dan visual terbagi dua kolom kiri-kanan */
+            flex-wrap: wrap;                 /* Membuat layout otomatis menumpuk vertikal jika dibuka di resolusi layar kecil smartphone */
+            gap: 40px;                       /* Memberikan jarak celah pemisah yang lapang sebesar 40px di antara kedua kolom */
+            align-items: center;             /* Menyejajarkan ketinggian vertikal konten teks dan visual agar rata di tengah */
+            margin-bottom: 60px;             /* Memberikan margin jarak luar ke bawah sebesar 60 piksel */
+        }
+
+        .split-text { 
+            flex: 1;                         /* Menginstruksikan kolom teks untuk mengambil ruang proporsional yang tersedia secara adil */
+            min-width: 300px;                /* Menetapkan batas lebar minimum kolom sebesar 300px sebelum dipaksa turun baris */
+        }
+        
+        .split-text h2 { 
+            font-size: 32px;                 /* Mengatur ukuran huruf judul besar split section sebesar 32px */
+            color: #fff;                     /* Mengubah warna teks judul menjadi putih bersih */
+            margin-bottom: 20px;             /* Memberikan jarak renggang di bawah judul teks sebesar 20px */
+        }
+        
+        .split-text h2 span { 
+            color: #00f0ff;                  /* Mewarnai kata kunci dekoratif di dalam tag span judul dengan warna cyan neon */
+        }
+        
+        .split-text p { 
+            color: #bfaecf;                  /* Mengatur warna teks deskripsi split section menjadi ungu pastel */
+            margin-bottom: 25px;             /* Memberikan ruang pemisah di bawah paragraf sebesar 25px sebelum tombol */
+        }
+
+        /* ==================================================================
+           6. SPLIT-VISUAL: FUTURISTIC INTERACTIVE HUD DASHBOARD
+           ================================================================== */
+
+        .split-visual {
+            flex: 1;                         /* Menginstruksikan kolom visual mengambil sisa ruang layout secara fleksibel */
+            min-width: 300px;                /* Menetapkan lebar minimum kolom visual sebesar 300px agar tampilan tidak rusak */
+            height: 380px;                   /* Menetapkan tinggi area visual dashboard fiksi ilmiah secara paten sebesar 380px */
+            background: #090510;             /* Mengatur latar belakang panel visual dengan warna ungu-hitam pekat digital */
+            border: 1px solid #221538;       /* Memberikan batas garis tepi tipis berwarna ungu gelap digital */
+            border-radius: 8px;              /* Membulatkan sudut luar kontainer visual sebesar 8px */
+            display: flex;                   /* Mengaktifkan sistem flexbox internal */
+            justify-content: center;         /* Menaruh panel instrumen (HUD) tepat di tengah-tengah secara horizontal */
+            align-items: center;             /* Menaruh panel instrumen (HUD) tepat di tengah-tengah secara vertikal */
+            padding: 30px;                   /* Memberikan ruang pembatas dalam sebesar 30px */
+            position: relative;              /* Mengatur konteks posisi relatif untuk penanganan animasi hover anak elemennya */
+        }
+
+        .hud-panel {
+            width: 100%;                     /* Memaksa lebar panel mengikuti ruang induk maksimal */
+            max-width: 320px;                /* Membatasi lebar maksimal internal panel instrumen agar tetap proporsional di 320px */
+            font-family: 'Courier New', Courier, monospace; /* Mengubah fonta teks panel menjadi bergaya kode komputer jadul/terminal */
+            display: flex;                   /* Menyusun isi komponen di dalam panel secara flexbox vertikal */
+            flex-direction: column;          /* Mengubah arah alur komponen flexbox berderet ke bawah (vertikal) */
+            gap: 25px;                       /* Memberikan jarak pemisah renggang sebesar 25px antar bagian panel */
+        }
+
+        .hud-header {
+            display: flex;                   /* Menyusun komponen kepala instrumen secara kiri-kanan */
+            justify-content: space-between;  /* Memisahkan teks judul sistem ke kiri dan teks status online ke kanan */
+            align-items: center;             /* Meluruskan posisi vertikal komponen kepala HUD di tengah */
+            border-bottom: 1px solid rgba(138, 43, 226, 0.3); /* Membuat garis dekorasi batas bawah tipis transparan ungu */
+            padding-bottom: 10px;            /* Memberikan ruang dalam di bawah teks sebelum menyentuh garis */
+        }
+
+        .hud-title { 
+            font-size: 11px;                 /* Mengatur ukuran teks kode judul sistem sekecil 11px */
+            color: #6c5a80;                  /* Mewarnai teks kode dengan warna ungu abu-abu tua redup */
+            font-weight: bold;               /* Mencetak tebal tulisan judul kode */
+            letter-spacing: 1px;             /* Memberikan jarak renggang antarhuruf sebesar 1px */
+        }
+        
+        .hud-status {
+            font-size: 10px;                 /* Mengatur teks status indikator berukuran 10px */
+            background: rgba(0, 240, 255, 0.1); /* Memberikan warna latar belakang transparan biru cyan tipis */
+            color: #00f0ff;                  /* Mewarnai huruf teks indikator menjadi biru cyan cerah */
+            padding: 2px 8px;                /* Memberikan bantalan ketebalan: 2px atas-bawah dan 8px kiri-kanan */
+            border-radius: 3px;              /* Membulatkan tepi kotak teks indikator sebesar 3px */
+            border: 1px solid rgba(0, 240, 255, 0.3); /* Membuat garis tepi kotak tipis transparan biru cyan */
+            animation: pulseGlow 2s infinite alternate; /* Memasang animasi bernama pulseGlow yang berjalan selamanya bolak-balik selama 2 detik */
+        }
+
+        .hud-body { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px;                       /* Memberikan celah pemisah konstan sebesar 12px antar baris status zona */
+        }
+        
+        .hud-line {
+            display: flex;                   /* Mengatur komponen di dalam baris agar tersusun horizontal */
+            align-items: center;             /* Meluruskan posisi vertikal tulisan di dalam baris */
+            justify-content: space-between;  /* Memisahkan kode zona di kiri dan nilai status terhubung di ujung kanan */
+            background: rgba(255, 255, 255, 0.02); /* Memberikan warna latar baris transparan abu-abu yang sangat tipis */
+            padding: 12px 15px;              /* Memberikan ketebalan baris: 12px atas-bawah dan 15px kiri-kanan */
+            border-left: 3px solid #3d1e5a;  /* Desain default: memberikan aksen vertikal tebal warna ungu tua di tepi kiri baris */
+            font-size: 13px;                 /* Mengatur ukuran teks terminal baris sebesar 13px */
+            transition: all 0.3s ease;       /* Mengaktifkan fitur transisi halus saat terjadi interaksi kursor */
+        }
+
+        .hud-code { color: #6c5a80; font-weight: bold; } /* Mewarnai teks kode zona (Z-01, dll) dengan warna ungu redup */
+        .hud-label { color: #f0f0f0; letter-spacing: 0.5px; } /* Mewarnai teks nama sistem dengan warna putih pudar */
+        .hud-value { font-weight: bold; } /* Mencetak tebal status penutup di ujung kanan baris */
+
+        /* Kustomisasi Identitas Warna Garis Tepi dan Teks Status Khusus Tiap Zona */
+        .active-anime { border-left-color: #ff007f; }      /* Mengubah aksen garis kiri baris anime menjadi pink neon */
+        .active-anime .hud-value { color: #ff007f; }       /* Mengubah warna teks status ENGAGED menjadi pink neon */
+        
+        .active-game { border-left-color: #00f0ff; }       /* Mengubah aksen garis kiri baris game menjadi biru cyan */
+        .active-game .hud-value { color: #00f0ff; }        /* Mengubah warna teks status ACTIVE menjadi biru cyan */
+        
+        .active-cos { border-left-color: #8a2be2; }        /* Mengubah aksen garis kiri baris cosplay menjadi ungu violet */
+        .active-cos .hud-value { color: #8a2be2; }         /* Mengubah warna teks status SYNCED menjadi ungu violet */
+
+        .hud-footer { display: flex; flex-direction: column; gap: 10px; }
+        
+        .hud-progress-bar { 
+            width: 100%; 
+            height: 4px;                     /* Menentukan ketebalan wadah loading bar sedalam 4px */
+            background: rgba(255, 255, 255, 0.05); /* Mewarnai wadah loading bar dengan warna abu-abu transparan translusen */
+            border-radius: 2px; 
+            overflow: hidden;                /* Memotong isi loading bar yang keluar dari radius sudut */
+        }
+        
+        .hud-progress-fill { 
+            width: 75%;                      /* Kondisi awal: Mengisi bar kemajuan sebesar 75% dari total panjang */
+            height: 100%; 
+            background: linear-gradient(90deg, #ff007f, #00f0ff); /* Mewarnai isi bar dengan gradasi horizontal dari pink ke cyan */
+            transition: width 0.5s ease;     /* Mengatur animasi perpanjangan bar kemajuan selama 0.5 detik saat lebar berubah */
+        }
+        
+        .hud-version { 
+            font-size: 10px; 
+            color: #4c3b60; 
+            text-align: right;               /* Meratakan posisi teks versi sistem fiksi di sebelah kanan bawah panel */
+        }
+
+        /* EFEK INTERAKTIF (HOVER) PADA DASHBOARD VISUAL */
+        .split-visual:hover { 
+            border-color: rgba(138, 43, 226, 0.5); /* Mengubah warna border luar kontainer visual menjadi ungu menyala saat didekati */
+            box-shadow: inset 0 0 20px rgba(138, 43, 226, 0.1); /* Memberikan efek pendaran cahaya redup di bagian dalam area visual */
+        }
+        
+        /* Menggeser posisi baris teks terminal sedikit ke kanan saat kontainer utama di-hover */
+        .split-visual:hover .hud-line { 
+            background: rgba(255, 255, 255, 0.04); /* Membuat latar baris sedikit lebih terang */
+            transform: translateX(5px);      /* Menggeser baris secara horizontal ke kanan sejauh 5 piksel */
+        }
+        
+        /* Memaksa indikator loading bar penuh menjadi 100% saat kontainer utama didekati kursor */
+        .split-visual:hover .hud-progress-fill { 
+            width: 100%; 
+        }
+
+        /* ANIMASI KEYFRAMES: PEMANIS EFEK RADAR BERDENYUT (PULSE GLOW) */
+        @keyframes pulseGlow {
+            0% { opacity: 0.6; box-shadow: 0 0 5px rgba(0, 240, 255, 0.2); }   /* Kondisi awal: redup dan bayangan pendaran tipis */
+            100% { opacity: 1; box-shadow: 0 0 12px rgba(0, 240, 255, 0.5); } /* Kondisi puncak: terang benderang dengan pendaran neon tajam */
+        }
+
+        /* ==================================================================
+           7. FOOTER SECTION
+           ================================================================== */
+
+        footer {
+            background: #08040d;             /* Mewarnai latar belakang footer dengan warna hitam pekat kosmis */
+            border-top: 2px solid #8a2be2;   /* Membuat pembatas garis atas setebal 2px berwarna ungu violet */
+            padding: 30px 5%;                /* Memberikan ketebalan ruang dalam footer: 30px atas-bawah */
+            text-align: center;              /* Meratakan posisi hak cipta teks di tengah-tengah */
+            margin-top: 60px;                /* Memberikan pembatas jarak dari konten di atasnya sebesar 60px */
+            font-size: 14px;                 /* Mengatur ukuran huruf teks footer sebesar 14px */
+            color: #6c5a80;                  /* Mengubah warna teks hak cipta menjadi ungu tua kalem */
+        }
+        footer p span { color: #00f0ff; }    /* Mengubah warna nama brand NexaVerse di dalam footer menjadi biru cyan */
+
+        /* ==================================================================
+           8. STYLING POP-UP MODAL BASE (FORM LOGIN MODAL)
+           ================================================================== */
+
+        .modal-overlay {
+            position: fixed;                 /* Mengunci posisi overlay di layar agar tidak ikut bergerak saat halaman di-scroll */
+            top: 0; left: 0; 
+            width: 100%; height: 100%;       /* Memaksa tirai overlay menutupi seluruh luas layar monitor pengguna */
+            background: rgba(8, 4, 13, 0.85); /* Mewarnai tirai latar belakang dengan hitam transparan pekat (85%) */
+            backdrop-filter: blur(8px);      /* Memberikan efek kaca buram modern pada konten di belakang tirai modal */
+            -webkit-backdrop-filter: blur(8px); /* Memastikan dukungan efek kaca buram bekerja di browser berbasis Safari/Apple */
+            z-index: 2000;                   /* Memastikan tirai modal berada di lapisan tertinggi mengungguli header melayang */
+            display: flex;                   /* Mengaktifkan flexbox untuk menaruh kotak login tepat di tengah layar */
+            justify-content: center; 
+            align-items: center;
+            opacity: 0;                      /* Kondisi awal: Menyembunyikan modal total dengan membuat nilai transparansi 0 */
+            pointer-events: none;            /* Mencegah klik tidak sengaja tembus ke dalam komponen modal yang sedang gaib */
+            transition: opacity 0.4s ease;   /* Memberikan efek animasi transisi memudar (fade-in) selama 0.4 detik */
+        }
+
+        /* AKSI PEMICU JANGKAR MODAL (:TARGET)
+           Trik CSS Murni: Jika URL browser diakhiri dengan tag ID modal yang cocok (contoh: #loginModal), blok style ini dieksekusi */
+        .modal-overlay:target {
+            opacity: 1;                      /* Mengubah transparansi menjadi 1 (membuat modal terlihat utuh) */
+            pointer-events: auto;            /* Mengaktifkan kembali fungsi tombol klik, ketik input, dan interaksi di dalam modal */
+        }
+
+        .modal-content {
+            background: #140b24;             /* Mewarnai kotak form modal dengan warna ungu gelap pekat */
+            border: 2px solid #ff007f;       /* Memasang garis bingkai kotak modal dengan warna pink neon */
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.3), inset 0 0 15px rgba(138, 43, 226, 0.2); /* Memberikan pendaran ganda luar dalam */
+            border-radius: 16px;             /* Membulatkan sudut tajam kotak modal sebanyak 16 piksel */
+            width: 90%;                      /* Mengatur lebar kotak dinamis mengikuti layar gadget (90% dari lebar hp) */
+            max-width: 420px;                /* Membatasi lebar maksimal kotak form agar tidak melar di PC monitor yaitu 420px */
+            padding: 35px 30px;              /* Memberikan jarak dinding dalam kotak: 35px vertikal dan 30px horizontal */
+            position: relative;              /* Mengatur konteks relatif untuk penempatan tombol close 'X' yang absolut */
+            transform: translateY(-30px);    /* Kondisi awal: Menggeser kotak 30px sedikit ke atas untuk persiapan animasi jatuh */
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Menambahkan animasi elastis memantul (pop-out effect) */
+        }
+
+        /* Ketika modal ditarget aktif, ubah perilaku bentuk kotak kontennya */
+        .modal-overlay:target .modal-content {
+            transform: translateY(0);        /* Mengembalikan kotak modal ke posisi normal (turun anggun dari atas ke tengah) */
+        }
+
+        .modal-close {
+            position: absolute;              /* Mencabut tombol dari susunan layout normal agar bisa dipasang manual */
+            top: 15px;                       /* Menempelkan tombol silang berjarak 15px dari atas batas dalam kotak */
+            right: 20px;                     /* Menempelkan tombol silang berjarak 20px dari kanan batas dalam kotak */
+            font-size: 28px;                 /* Memperbesar ukuran karakter huruf tanda silang menjadi 28px */
+            color: #6c5a80;                  /* Mewarnai tanda silang dengan warna abu-abu keunguan redup */
+            text-decoration: none;           /* Menghilangkan garis bawah default tautan link */
+            line-height: 1;                  /* Memaksa tinggi baris karakter sekecil mungkin agar tidak memakan ruang klik */
+            cursor: pointer;                 /* Mengubah bentuk kursor menjadi tangan menunjuk saat berada di atas tombol silang */
+            transition: color 0.3s;          /* Animasi perubahan warna saat di-hover */
+        }
+        .modal-close:hover { color: #ff007f; } /* Mengubah warna tombol silang menjadi pink menyala saat disorot untuk ditutup */
+
+        .modal-header { text-align: center; margin-bottom: 25px; } /* Menaruh teks judul modal di tengah dan memberi jarak bawah 25px */
+        .modal-header h2 { font-size: 26px; font-weight: 800; color: #00f0ff; letter-spacing: 2px; text-shadow: 0 0 8px rgba(0, 240, 255, 0.4); }
+        .modal-header h2 span { color: #ff007f; text-shadow: 0 0 8px rgba(255, 0, 127, 0.4); }
+        .modal-header p { font-size: 13px; color: #bfaecf; margin-top: 5px; }
+
+        .modal-form { display: flex; flex-direction: column; gap: 18px; } /* Menyusun form ketik secara vertikal ke bawah berjarak celah 18px */
+        .input-group { display: flex; flex-direction: column; gap: 6px; }  /* Mengatur susunan label petunjuk dan kotak input berjarak 6px */
+        .input-group label { font-size: 12px; color: #a594b8; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        
+        .input-group input { 
+            background: #0d0814;             /* Mewarnai bagian dalam kolom input teks dengan warna hitam pekat website */
+            border: 1px solid #3d1e5a;       /* Memberikan bingkai pembatas kolom input berwarna ungu gelap */
+            border-radius: 8px;              /* Membulatkan sudut tepi kolom input teks sebesar 8px */
+            padding: 12px 15px;              /* Mengatur ketebalan bantalan dalam kolom input ketik */
+            color: #ffffff;                  /* Memastikan karakter teks yang diketik pengguna berwarna putih bersih */
+            font-size: 14px;                 /* Mengatur ukuran huruf teks input sebesar 14px */
+            outline: none;                   /* Menghapus garis outline luar bawaan browser yang mengganggu estetika */
+            transition: all 0.3s;            /* Animasi kelembutan perpindahan fokus ketik */
+        }
+        
+        /* Ketika kolom input sedang aktif diklik/diketik oleh user (fokus) */
+        .input-group input:focus { 
+            border-color: #00f0ff;           /* Mengubah bingkai tepi kolom input menjadi warna biru cyan menyala */
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3); /* Memberikan aura pendar cahaya biru di sekeliling kolom ketik */
+        }
+
+        /* Pengaturan Opsi Tambahan Form (Ingat Saya & Lupa Password) */
+        .form-options {
+            display: flex;                   /* Menyusun baris opsi tambahan secara horizontal kiri-kanan */
+            justify-content: space-between;  /* Memisahkan fitur Ingat Saya di kiri ujung dan Lupa Sandi di kanan ujung */
+            align-items: center; 
+            font-size: 13px;                 /* Mengatur ukuran huruf baris opsi sebesar 13px */
+            margin: -4px 0 4px 0;            /* Menyelaraskan jarak luar ruang agar pas di antara input dan tombol masuk */
+        }
+
+        .remember-me {
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            color: #bfaecf; 
+            cursor: pointer; 
+            user-select: none;               /* Mencegah teks ter-blok/tersorot biru secara tidak sengaja saat dicentang ganda */
+        }
+
+        .remember-me input { display: none; } /* Menyembunyikan komponen kotak centang (checkbox) bawaan browser yang kaku */
+        
+        /* Mendesain kotak centang (checkbox) buatan sendiri dari nol */
+        .checkmark {
+            width: 16px; height: 16px;       /* Mengunci ukuran kotak centang kostum sebesar 16x16 piksel */
+            border: 1px solid #3d1e5a;       /* Garis bingkai kotak centang ungu tua */
+            background: #0d0814;             /* Latar belakang kotak centang hitam */
+            border-radius: 4px;              /* Sudut membulat kecil 4px */
+            display: inline-block; 
+            position: relative; 
+            transition: all 0.2s; 
+        }
+
+        /* Logika Kombinasi CSS: Ketika input checkbox tersembunyi berstatus dicentang (checked), manipulasi style .checkmark di dekatnya */
+        .remember-me input:checked + .checkmark {
+            background: #ff007f;             /* Mengubah warna isi kotak centang menjadi pink neon penuh */
+            border-color: #ff007f;           /* Mengubah warna bingkai kotak centang menjadi pink neon */
+        }
+
+        /* Menggambar tanda centang putih di dalam kotak menggunakan pseudo-element ::after */
+        .remember-me input:checked + .checkmark::after {
+            content: '';                     /* Membuat elemen gambar bayangan */
+            position: absolute; 
+            left: 5px; top: 2px;             /* Menyesuaikan letak presisi tanda centang di tengah kotak */
+            width: 4px; height: 8px;         /* Membuat rasio garis pembentuk centang */
+            border: solid white;             /* Mewarnai garis centang dengan warna putih */
+            border-width: 0 2px 2px 0;       /* Menggambar sudut garis bawah dan kanan saja untuk membentuk huruf 'L' */
+            transform: rotate(45deg);        /* Memutar sudut objek huruf 'L' sebesar 45 derajat agar berubah menjadi simbol centang */
+        }
+
+        .forgot-pass { color: #00f0ff; text-decoration: none; transition: color 0.2s; }
+        .forgot-pass:hover { color: #ff007f; text-decoration: underline; } /* Memberikan efek garis bawah dan warna pink saat disorot */
+
+        /* Pengaturan Tombol Kirim Form Utama Login */
+        .btn-submit {
+            background: linear-gradient(45deg, #ff007f, #8a2be2); /* Gradasi warna tombol pink-ungu */
+            border: none;                    /* Menghapus garis border bawaan pabrik tombol */
+            color: white;                    /* Warna teks tulisan tombol putih murni */
+            padding: 14px;                   /* Ketebalan tombol dalam sebesar 14px */
+            border-radius: 8px;              /* Membulatkan sudut tombol kirim sebanyak 8px */
+            font-size: 14px;                 /* Ukuran huruf teks tombol 14px */
+            font-weight: bold;               /* Mencetak tebal teks di dalam tombol */
+            text-transform: uppercase;       /* Mengubah huruf teks tombol menjadi kapital */
+            letter-spacing: 1px;             /* Jarak renggang antar karakter huruf 1px */
+            cursor: pointer; 
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); /* Efek pendaran neon pink di sekitar tombol submit */
+            transition: all 0.3s; 
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);     /* Efek tombol naik sedikit 2px saat kursor di atasnya */
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.6); /* Memperkuat intensitas cahaya beralih ke warna biru cyan */
+            background: linear-gradient(45deg, #00f0ff, #8a2be2); /* Mengubah arah kombinasi warna gradasi saat di-hover */
+        }
+
+        /* Komponen Garis Pembatas (Separator) Tengah */
+        .social-login-separator { 
+            text-align: center; 
+            margin: 20px 0; 
+            position: relative;              /* Menjadi basis jangkar untuk penempatan garis horizontal tiruan */
+        }
+        
+        /* Menggambar garis horizontal panjang tipis menembus teks */
+        .social-login-separator::before {
+            content: ''; 
+            position: absolute; 
+            left: 0; top: 50%;               /* Memosisikan posisi garis tepat memotong di tengah-tengah tinggi elemen */
+            width: 100%; height: 1px;        /* Membentangkan panjang garis penuh 100% dengan ketebalan tipis 1px */
+            background: rgba(61, 30, 90, 0.6); /* Mewarnai garis dengan warna ungu gelap transparan tipis */
+            z-index: 1;                      /* Menaruh lapisan posisi garis di bawah teks utama */
+        }
+        
+        /* Menyelamatkan posisi teks agar menutupi garis di bawahnya */
+        .social-login-separator span {
+            background: #140b24;             /* Mewarnai latar teks sama persis dengan warna kotak modal untuk mengelabui garis */
+            padding: 0 15px;                 /* Memberikan bantalan kiri-kanan agar garis di kiri-kanan teks terdorong menjauh */
+            color: #6c5a80;                  /* Mewarnai teks kata pemisah dengan warna ungu tua redup */
+            font-size: 12px;                 /* Mengatur ukuran huruf teks kecil 12px */
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            position: relative; 
+            z-index: 2;                      /* Menaruh teks di lapisan nomor 2 agar sukses menindih garis pembatas di bawahnya */
+        }
+
+        /* Komponen Tombol Grup Login Alternatif Sosial Media */
+        .social-group { 
+            display: flex; 
+            gap: 15px;                       /* Memberikan celah renggang 15px berdampingan antara tombol Google dan Facebook */
+            margin-bottom: 5px; 
+        }
+        
+        .btn-social {
+            flex: 1;                         /* Memaksa kedua tombol membagi area lebar ruang seimbang rata tengah (50:50) */
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px;                       /* Jarak antara logo ikon medsos dan teks tulisan sebesar 10px */
+            padding: 11px; 
+            border-radius: 8px; 
+            font-size: 14px; 
+            font-weight: 600; 
+            color: #ffffff; 
+            text-decoration: none; 
+            background: #0d0814; 
+            border: 1px solid #3d1e5a; 
+            transition: all 0.3s ease; 
+        }
+
+        .modal-footer { text-align: center; margin-top: 25px; font-size: 13px; color: #6c5a80; }
+        .modal-footer a { color: #00f0ff; text-decoration: none; font-weight: 600; }
+        .modal-footer a:hover { text-decoration: underline; }
+
+        .btn-social i.social-icon { font-size: 16px; transition: color 0.3s ease; } /* Mengatur ukuran font ikon medsos 16px */
+        .icon-google { color: #bfaecf; }     /* Warna abu-abu default ikon google sebelum disentuh kursor */
+        .icon-facebook { color: #bfaecf; }   /* Warna abu-abu default ikon facebook sebelum disentuh kursor */
+
+        /* Efek Interaksi Khusus Tombol Google */
+        .btn-social.google:hover { 
+            border-color: #ea4335;           /* Mengubah border tombol menjadi warna merah khas Google saat di-hover */
+            background: rgba(234, 67, 53, 0.08); /* Memberikan warna latar belakang transparan merah super tipis */
+            color: #ffffff; 
+        }
+        .btn-social.google:hover .icon-google { 
+            color: #ea4335;                  /* Mengubah warna entitas logo ikon font-awesome Google menjadi merah resmi */
+        }
+
+        /* Efek Interaksi Khusus Tombol Facebook */
+        .btn-social.facebook:hover { 
+            border-color: #1877f2;           /* Mengubah border tombol menjadi warna biru resmi Facebook saat di-hover */
+            background: rgba(24, 119, 242, 0.08); /* Memberikan warna latar belakang transparan biru tipis */
+            color: #ffffff; 
+        }
+        .btn-social.facebook:hover .icon-facebook { 
+            color: #1877f2;                  /* Mengubah warna ikon font-awesome Facebook menjadi biru resmi */
+        }
+
+
+        /* ==================================================================
+           9. STYLING NOTIFIKASI LOGIN BERHASIL (SUCCESS MODAL)
+           ================================================================== */
+
+        /* Modifikasi khusus kotak konten modal sukses agar bernuansa aman/berhasil */
+        .success-box {
+            border-color: #00f0ff;           /* Mengganti total warna bingkai luar modal sukses menjadi biru cyan cerah */
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.25); /* Memberikan pendaran cahaya glow biru cyan di sekeliling kotak sukses */
+            text-align: center;              /* Memaksa seluruh teks/ikon di dalam kotak berada di posisi tengah */
+            padding: 40px 30px;              /* Memberikan ketebalan ruang dalam: 40px vertikal dan 30px horizontal */
+        }
+
+        /* Area bungkus ikon lingkaran checklist animasi pendar */
+        .success-icon-wrap {
+            font-size: 55px;                 /* Memperbesar ukuran simbol ikon centang sukses menjadi raksasa (55px) */
+            color: #00f0ff;                  /* Mewarnai ikon centang dengan warna biru cyan digital */
+            margin-bottom: 15px;             /* Memberikan margin jarak pemisah 15px di bawah objek ikon */
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.6); /* Memberikan pancaran aura lampu neon biru tebal pada ikon centang */
+            animation: scaleUpCheck 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5) forwards; /* Menjalankan animasi hentakan muncul (scaleUpCheck) */
+        }
+
+        .success-message {
+            color: #bfaecf;                  /* Mengubah warna paragraf pesan sukses menjadi ungu pastel lembut */
+            font-size: 14px;                 /* Ukuran huruf pesan detail 14px */
+            margin-bottom: 25px;             /* Jarak ruang pemisah di bawah pesan sebesar 25px sebelum tombol beranda */
+        }
+
+        /* Tombol Khusus Kembali ke Beranda (.btn-back-home) */
+        .btn-back-home {
+            display: block;                  /* Mengubah tombol menjadi balok utuh horizontal */
+            width: 100%;                     /* Memaksa panjang tombol membentang penuh 100% memenuhi lebar kotak sukses */
+            padding: 13px;                   /* Ketebalan dalam tombol balik beranda 13px */
+            border-radius: 8px;              /* Membulatkan sudut tajam tombol beranda sebesar 8px */
+            font-size: 14px;                 /* Ukuran teks tombol 14px */
+            background: linear-gradient(45deg, #00f0ff, #8a2be2); /* Memberikan warna gradasi kebalikan dari biru cyan ke ungu */
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); /* Bayangan aura biru neon tipis di sekeliling tombol beranda */
+        }
+
+        .btn-back-home:hover {
+            background: linear-gradient(45deg, #ff007f, #8a2be2); /* Ketika disorot, warna gradasi berubah dramatis menjadi pink-ungu */
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.5); /* Intensitas pendaran bayangan diubah menguat menjadi pink neon terang */
+        }
+
+        /* TIMELINE ANIMASI KEYFRAMES: GERAKAN ENTAKAN IKON SUKSES (SCALE UP) */
+        @keyframes scaleUpCheck {
+            0% { transform: scale(0); opacity: 0; }   /* Detik ke-0: Ukuran ikon raib mengecil menjadi 0 dan menghilang gaib */
+            100% { transform: scale(1); opacity: 1; } /* Selesai: Ikon mekar membesar ke ukuran asli dengan efek pantulan elastis penuh */
+        }

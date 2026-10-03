@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexaVerse - Komunitas Otaku & Gamers</title>
+    <link rel="stylesheet" href="cssbersama.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <div class="logo">Nexa<span>Verse</span></div>
+            <nav>
+                <ul>
+                    <li><a href="homepage.html" class="active">Home</a></li>
+                    <li><a href="animepage.html">Anime</a></li>
+                    <li><a href="gamerspage.html">Gamers</a></li>
+                    <li><a href="cosplaypage.html">Cosplay</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Tempat Berkumpulnya Para Otaku dan Gamers</h1>
+        <p>Selamat datang di NexaVerse! Jagat utama bagi para pecinta Anime, Gamers kompetitif, dan Cosplayer kreatif untuk saling berbagi karya, info terupdate, dan mabar.</p>
+        <a href="#loginModal" class="btn">Gabung Komunitas</a>
+    </section>
+
+    <div class="container" id="eksplor">
+        <h2 class="section-title">Pilih Zona Kamu</h2>
+        
+        <div class="card-container">
+            <div class="card">
+                <div class="card-img img-anime-1">
+                    <span class="card-badge">Otaku Zone</span>
+                </div>
+                <div class="card-content">
+                    <h3>Anime Forum & Streaming</h3>
+                    <p>Tempat streaming anime ter-update, diskusi seru mengenai anime ongoing, teori plot anime terdalam, serta rekomendasi tontonan terbaik minggu ini.</p>
+                    <a href="animepage.html" class="btn" style="padding: 8px 20px; font-size: 14px;">Masuk Zona Anime</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img img-game-2">
+                    <span class="card-badge">Esports & RPG</span>
+                </div>
+                <div class="card-content">
+                    <h3>Gamers Hub</h3>
+                    <p>Cari tim mabar (Looking For Group), turnamen komunitas bulanan, info update patch note game favorit, dan panduan mekanik pro.</p>
+                    <a href="gamerspage.html" class="btn" style="padding: 8px 20px; font-size: 14px;">Mulai Mabar</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-img img-cos-1">
+                    <span class="card-badge">Art & Craft</span>
+                </div>
+                <div class="card-content">
+                    <h3>Cosplay Showcase</h3>
+                    <p>Ruang apresiasi untuk kostum spektakuler, tempat kamu mengetahui dunia Cosplayeer, dan sesi galeri foto.</p>
+                    <a href="cosplaypage.html" class="btn" style="padding: 8px 20px; font-size: 14px;">Lihat Galeri</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="split-section">
+            <div class="split-text">
+                <h2>Mengapa Memilih <span>NexaVerse</span>?</h2>
+                <p>Kami menyediakan ekosistem terintegrasi tanpa toxic environment. Kamu bisa mengunggah fanart, membagikan cuplikan gameplay (highlight), hingga mempromosikan portofolio cosplay kamu langsung ke target audiens yang tepat.</p>
+                <a href="#loginModal" class="btn">Daftar Akun Gratis</a>
+            </div>
+            
+            <div class="split-visual">
+                <div class="hud-panel">
+                    <div class="hud-header">
+                        <span class="hud-title">// NEXA_SYSTEM_INIT</span>
+                        <span class="hud-status">ONLINE</span>
+                    </div>
+                    <div class="hud-body">
+                        <div class="hud-line active-anime">
+                            <span class="hud-code">Z-01</span>
+                            <span class="hud-label">OTAKU_NETWORK</span>
+                            <span class="hud-value">[ENGAGED]</span>
+                        </div>
+                        <div class="hud-line active-game">
+                            <span class="hud-code">Z-02</span>
+                            <span class="hud-label">GAMERS_CLUSTER</span>
+                            <span class="hud-value">[ACTIVE]</span>
+                        </div>
+                        <div class="hud-line active-cos">
+                            <span class="hud-code">Z-03</span>
+                            <span class="hud-label">COSPLAY_CORE</span>
+                            <span class="hud-value">[SYNCED]</span>
+                        </div>
+                    </div>
+                    <div class="hud-footer">
+                        <div class="hud-progress-bar">
+                            <div class="hud-progress-fill"></div>
+                        </div>
+                        <span class="hud-version">v2.6_STABLE</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 <span>NexaVerse</span> Community.</p>
+    </footer>
+
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-content">
+            <a href="#" class="modal-close">&times;</a>
+            
+            <div class="modal-header">
+                <h2>NEXA<span>LOGIN</span></h2>
+                <p>Akses Jagat Otaku & Gamers</p>
+            </div>
+
+            <form class="modal-form" action="#successModal">
+                <div class="input-group">
+                    <label>Username / Email</label>
+                    <input type="text" placeholder="Masukkan ID Nexa kamu..." required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        Ingat Saya
+                    </label>
+                    <a href="#" class="forgot-pass">Lupa Password?</a>
+                </div>
+
+                <button type="submit" class="btn-submit">Masuk Sistem</button>
+            </form>
+
+            <div class="social-login-separator">
+                <span>atau masuk dengan</span>
+            </div>
+
+            <div class="social-group">
+                <a href="#successModal" class="btn-social google">
+                    <i class="fab fa-google social-icon icon-google"></i> Google
+                </a>
+                <a href="#successModal" class="btn-social facebook">
+                    <i class="fab fa-facebook-f social-icon icon-facebook"></i> Facebook
+                </a>
+            </div>
+
+            <div class="modal-footer">
+                <p>Belum punya akun? <a href="#">Daftar Sekarang</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal-overlay">
+        <div class="modal-content success-box">
+            <div class="success-icon-wrap">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <div class="modal-header">
+                <h2>LOGIN <span>BERHASIL</span></h2>
+                <p>Selamat Datang Kembali, Agent Nexa!</p>
+            </div>
+            
+            <p class="success-message">Otentikasi berhasil dilakukan. Akses penuh ke seluruh Zona Forum kini telah aktif.</p>
+            
+            <a href="#" class="btn btn-back-home">Kembali Ke Beranda</a>
+        </div>
+    </div>
+
+</body>
+</html>

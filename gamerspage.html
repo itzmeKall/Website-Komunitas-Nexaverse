@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexaVerse - Gamers Hub</title>
+    <link rel="stylesheet" href="cssbersama.css"> 
+
+    <style>
+        /* Layout untuk Fitur Cari Teman Mabar */
+        .mabar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+
+        .mabar-box {
+            background: #1e1e24;
+            border-left: 4px solid #ff4655; /* Aksen warna gaming */
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+
+        .mabar-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+
+
+        .status-badge {
+            background: #00ff66;
+            color: #000;
+            padding: 2px 6px;
+            font-weight: bold;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+
+        /* Styling Jadwal Turnamen */
+        .tournament-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #1a1a1a;
+        }
+
+
+        .tournament-list th, .tournament-list td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+
+        .tournament-list th {
+            background-color: #25252b;
+            color: #fff;
+        }
+
+        /* -------------------------------------------------- */
+        /* BARIS CSS KHUSUS BACKGROUND */
+        /* -------------------------------------------------- */
+        .hero-gamers {
+            /*  latar belakang bertema game/anime game */
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(background/gamerbg.jpg) no-repeat center center/cover;
+            padding: 135px 20px;
+            text-align: center;
+            color: white;
+        }
+
+              /* icon forum */
+        .img-genshin { background-image: url('background/icon_game/256x256.png'); }
+
+        .img-hsr { background-image: url('background/icon_game/march7.png'); }
+
+        .img-valorant { background-image: url('background/icon_game/BS.png'); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">Nexa<span>Verse</span></div>
+            <nav>
+                <ul>
+                    <li><a href="homepage.html">Home</a></li>
+                    <li><a href="animepage.html">Anime</a></li>
+                    <li><a href="gamerspage.html" class="active">Gamers</a></li>
+                    <li><a href="cosplaypage.html">Cosplay</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- header dan paragraf di atas -->
+    <section class="hero-gamers">
+        <h1>Gamers Hub & E-Sports</h1>
+        <p>Klaim rank tertinggi kamu, temukan tim mabar idaman, dan ikuti turnamen komunitas NexaVerse!<br>
+            informasi seputar game favoritmu, tips & trik, serta update terbaru dari dunia gaming.</p>
+        </p>
+
+        <a href="#mabar" class="btn" style="margin-top: 60px;">Cari Tim Mabar</a>
+    </section>
+
+
+<!-- form kolom nya disni -->
+    <div class="container">
+        <h2 class="section-title">Trending Anime & Competitive Games</h2>
+        <div class="card-container">
+            
+            <div class="card">
+                <div class="card-img img-genshin">
+                    <span class="card-badge" style="background-color: #00bcff;">RPG</span>
+                </div>
+                <div class="card-content">
+                    <h3>Genshin Impact</h3>
+                    <p>Diskusi seputar build karakter, rute farming material, bocoran update region baru, dan panduan Spiral Abyss.</p>
+                    <a href="#loginModal" class="btn" style="padding: 8px 20px; font-size: 14px;">Buka Forum</a>
+                </div>
+            </div>
+
+
+
+            <div class="card">
+                <div class="card-img img-hsr">
+                    <span class="card-badge" style="background-color: #9d4edd;">Turn-Based</span>
+                </div>
+                <div class="card-content">
+                    <h3>Honkai: Star Rail</h3>
+                    <p>Strategi mengalahkan Boss Simulated Universe, rekomendasi tim/relic, dan obrolan santai mengenai lore Aeon.</p>
+                    <a href="#loginModal" class="btn" style="padding: 8px 20px; font-size: 14px;">Buka Forum</a>
+                </div>
+            </div>
+
+
+
+            <div class="card">
+                <div class="card-img img-valorant">
+                    <span class="card-badge" style="background-color: #ff4655;">FPS</span>
+                </div>
+                <div class="card-content">
+                    <h3>Blood Strike</h3>
+                    <p>Bagi-bagi lineup,Tips belut licin anti gancet serta cari kawan push rank Sampai leaderboard.</p>
+                    <a href="#loginModal" class="btn" style="padding: 8px 20px; font-size: 14px;">Buka Forum</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<!-- Lobby Mabar -->
+    <div class="container" id="mabar">
+        <h2 class="section-title">Lobby Mabar Terkini</h2>
+        <p style="text-align: center;">Butuh slot tambahan untuk tim kamu? Hubungi mereka sekarang!</p>
+        
+        <div class="mabar-grid">
+            <div class="mabar-box">
+                <div class="mabar-meta">
+                    <span>Oleh: <strong>SukiGamink</strong></span>
+                    <span class="status-badge">Sisa 2 Slot</span>
+                </div>
+                <h3>[Genshin] Temani saya le </h3>
+                <p>Mau kelarin domain domain artifact di Inazuma, butuh secepatnya id berapapun yang penting kuat.</p>
+                <a href="#loginModal" class="btn" style="padding: 5px 10px; font-size: 12px; margin-top: 10px; display: inline-block;">Join Lobby</a>
+            </div>
+
+            <div class="mabar-box" style="border-left-color: #00bcff;">
+                <div class="mabar-meta">
+                    <span>Oleh: <strong>HalahNyocot😹</strong></span>
+                    <span class="status-badge" style="background: #ffcc00;">Sisa 1 Slot</span>
+                </div>
+                <h3>[Blood Strike] Push Rank bronze ke Mythic</h3>
+                <p>Cari Belut Jago sniper yang toxic dan mau pake mic. Main malam ini mabar bareng jam 25 WIB.</p>
+                <a href="#loginModal" class="btn" style="padding: 5px 10px; font-size: 12px; margin-top: 10px; display: inline-block;">Join Lobby</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal/login pop up -->
+<div id="loginModal" class="modal-overlay">
+        <div class="modal-content">
+            <a href="#" class="modal-close">&times;</a>
+            
+            <div class="modal-header">
+                <h2>NEXA<span>LOGIN</span></h2>
+                <p>Akses Jagat Otaku & Gamers</p>
+            </div>
+
+            <form class="modal-form" action="#successModal">
+                <div class="input-group">
+                    <label>Username / Email</label>
+                    <input type="text" placeholder="Masukkan ID Nexa kamu..." required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        Ingat Saya
+                    </label>
+                    <a href="#" class="forgot-pass">Lupa Password?</a>
+                </div>
+
+                <button type="submit" class="btn-submit">Masuk Sistem</button>
+            </form>
+
+            <div class="social-login-separator">
+                <span>atau masuk dengan</span>
+            </div>
+
+            <div class="social-group">
+                <a href="#successModal" class="btn-social google">
+                    <i class="fab fa-google social-icon icon-google"></i> Google
+                </a>
+                <a href="#successModal" class="btn-social facebook">
+                    <i class="fab fa-facebook-f social-icon icon-facebook"></i> Facebook
+                </a>
+            </div>
+
+            <div class="modal-footer">
+                <p>Belum punya akun? <a href="#">Daftar Sekarang</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal-overlay">
+        <div class="modal-content success-box">
+            <div class="success-icon-wrap">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <div class="modal-header">
+                <h2>LOGIN <span>BERHASIL</span></h2>
+                <p>Selamat Datang Kembali, Agent Nexa!</p>
+            </div>
+            
+            <p class="success-message">Otentikasi berhasil dilakukan. Akses penuh ke seluruh Zona Forum kini telah aktif.</p>
+            
+            <a href="#" class="btn btn-back-home">Kembali Ke Beranda</a>
+        </div>
+    </div>
+
+
+
+<!-- kolom turnamen -->
+    <div class="container">
+        <h2 class="section-title">Info Turnamen Komunitas NexaVerse</h2>
+        <div style="overflow-x: auto;">
+            <table class="tournament-list">
+                <thead>
+                    <tr>
+                        <th>Nama Turnamen</th>
+                        <th>Game</th>
+                        <th>Tanggal Pelaksanaan</th>
+                        <th>Total Hadiah</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Nexa Cup Season 1</strong></td>
+                        <td>Blood Strike</td>
+                        <td>15 Juli 2026</td>
+                        <td>Rp 2.500.000 + Merchandise</td>
+                        <td><a href="#loginModal" class="btn" style="padding: 4px 12px; font-size: 12px;">Daftar</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Teyvat Speedrun Challenge</strong></td>
+                        <td>Genshin Impact</td>
+                        <td>28 Juli 2026</td>
+                        <td>1200 Primogems / orang</td>
+                        <td><a href="#loginModal" class="btn" style="padding: 4px 12px; font-size: 12px;">Daftar</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<!-- watermark -->
+    <footer>
+        <p>&copy; 2026 <span>NexaVerse</span> Community. GamersVerse Section.</p>
+    </footer>
+
+</body>
+</html>

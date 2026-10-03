@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexaVerse - Cosplay Universe</title>
+    <link rel="stylesheet" href="cssbersama.css">
+    <style>
+        /* ==========================================================================
+           1. HERO SECTION SIMPEL & MINIMALIS
+           ========================================================================== */
+        /* Penjelasan: .hero-cosplay bertindak sebagai spanduk utama (hero banner) di atas halaman.
+           display: flex dengan flex-direction: column menyusun judul, teks deskripsi, dan tombol secara vertikal.
+           justify-content: center dan align-items: center memaksa semua konten tersebut berada tepat di tengah-tengah.
+           min-height: 50vh memastikan tinggi area hero ini setidaknya memakan setengah dari tinggi layar pengguna.
+        */
+        .hero-cosplay {
+            padding: 140px 5% 100px 5%; 
+            text-align: center;
+            position: relative; 
+            overflow: hidden;   
+            min-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* PERBAIKAN: Mengubah nilai alpha (rgba) agar background gambar lebih terang */
+        /* Penjelasan: Pseudo-element ::before digunakan untuk menyisipkan gambar latar belakang (bg.jpeg) 
+           tanpa memengaruhi opasitas teks di atasnya. Properti linear-gradient menciptakan lapisan gradasi warna gelap transparan 
+           di atas gambar agar teks berwarna putih tetap kontras dan nyaman dibaca (high readability).
+        */
+        .hero-cosplay::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(to bottom, rgba(22, 15, 36, 0.4), rgba(22, 15, 36, 0.6)), url('cosplay/bg.jpeg'); 
+            background-size: cover;
+            background-position: center;
+            z-index: 1; 
+        }
+
+        /* Penjelasan: Selektor universal (*) ini memaksa semua elemen anak langsung di dalam .hero-cosplay 
+           memiliki z-index: 2, sehingga posisinya secara tumpukan visual berada di atas lapisan gambar latar (z-index: 1).
+        */
+        .hero-cosplay * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Penjelasan: Menentukan gaya teks judul besar pada banner hero. 
+           text-shadow memberikan bayangan hitam halus di belakang huruf agar teks putih tidak samar terkelupas 
+           oleh background gambar yang terang.
+        */
+        .hero-cosplay h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 20px;
+            color: #ffffff;
+            /* Tambahan efek shadow agar teks putih tetap terbaca jelas di background yang lebih terang */
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Penjelasan: Mengatur pragraf deskripsi pada banner utama. 
+           max-width: 700px dan margin: 0 auto membatasi bentangan teks kesamping agar pas di tengah dan tidak terlalu panjang, 
+           sehingga mata pembaca tidak mudah lelah.
+        */
+        .hero-cosplay p.hero-text {
+            font-size: 1.05rem;
+            max-width: 700px;
+            margin: 0 auto 35px auto;
+            color: #ffffff; /* Mengubah warna teks menjadi putih penuh agar kontras tetap terjaga */
+            line-height: 1.7;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Media Query untuk Perangkat Mobile (Layar Maksimal 768px) */
+        /* Penjelasan: Responsivitas layar gadget. Ketika website diakses dari ponsel, ukuran font h1 diperkecil 
+           menjadi 2rem dan paragraph menjadi 0.95rem agar layout tidak rusak dan pas dengan lebar layar hp.
+        */
+        @media (max-width: 768px) {
+            .hero-cosplay {
+                padding: 100px 20px 60px 20px;
+            }
+            .hero-cosplay h1 {
+                font-size: 2rem;
+            }
+            .hero-cosplay p.hero-text {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* ==========================================================================
+           2. BADGE & TEMA TINGKATAN KEMAHIRAN (LEVEL STYLE)
+           ========================================================================== */
+        /* Penjelasan: .level-badge berfungsi membuat label penanda kecil yang melingkar (capsule badge) 
+           untuk menandai tingkatan keahlian pembuat kostum (Novice, Craftsman, Elite).
+        */
+        .level-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;    
+        }
+        
+        /* Penjelasan: Pewarnaan neon cyberpunk spesifik beserta efek bayangan berpijar (box-shadow/glow effect) 
+           untuk masing-masing tingkatan kemahiran cosplay.
+        */
+        .bg-novice { background-color: #00f0ff; color: #000; box-shadow: 0 0 10px rgba(0, 240, 255, 0.5); }
+        .bg-craftsman { background-color: #e600ff; color: #fff; box-shadow: 0 0 10px rgba(230, 0, 255, 0.5); }
+        .bg-elite { background-color: #ff007f; color: #fff; box-shadow: 0 0 10px rgba(255, 0, 127, 0.5); }
+
+        /* Penjelasan: Pengaturan sub-judul teks yang terletak di dalam card tingkatan untuk memperkuat kesan estetika tema. */
+        .level-theme {
+            font-size: 13px;
+            color: #00f0ff;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+        .theme-craftsman { color: #e600ff; }
+        .theme-elite { color: #ff007f; }
+
+        /* ==========================================================================
+           3. RESPONSIVE CSS GRID GALLERY (GALERI SHOWCASE)
+           ========================================================================== */
+        /* Penjelasan: .cosplay-grid menggunakan CSS Grid modern yang sangat fleksibel. 
+           Properti repeat(auto-fit, minmax(280px, 1fr)) otomatis membagi jumlah kolom berdasarkan ruang layar yang tersedia; 
+           jika layar menyempit, item galeri akan otomatis turun ke bawah (wrapping) tanpa perlu banyak media query tambahan.
+        */
+        .cosplay-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        /* Penjelasan: .cosplay-item membungkus satu kesatuan kartu foto profil cosplayer. 
+           transition: all 0.3s ease dipasang agar animasi perubahan ukuran/warna saat di-hover berjalan mulus.
+        */
+        .cosplay-item {
+            background: #160f24;
+            border: 1px solid #3d1e5a;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Penjelasan: Efek interaktif ketika kursor mouse mendekati/berada di atas kartu foto. 
+           transform: scale(1.03) memberikan efek pembesaran sedikit (pop-up), bingkai berubah warna menjadi biru neon, 
+           dan memancarkan cahaya pendar di sekelilingnya.
+        */
+        .cosplay-item:hover {
+            transform: scale(1.03);
+            border-color: #00f0ff;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+
+        /* Penjelasan: Mengunci tinggi area foto galeri di angka 350px. 
+           background-size: cover menjamin foto tidak gepeng/distorsi meskipun rasio gambar aslinya berbeda.
+        */
+        .cosplay-img {
+            height: 350px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* Penjelasan: Memberi bantalan jarak aman (padding) untuk teks judul karya dan nama pembuat di bawah foto kartu. */
+        .cosplay-info {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .cosplay-info h4 {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .cosplay-info p {
+            color: #00f0ff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           4. SECTION PENJELASAN COSPLAY (LAYOUT DUA KOLOM - MEDIA & TEXT)
+           ========================================================================== */
+        /* Penjelasan: Properti scroll-margin-top memastikan ketika pengguna mengklik tombol link internal menu jangkar (#), 
+           posisi berhentinya layar tidak akan tertutup atau terpotong oleh bilah navigasi header atas yang melayang (sticky/fixed header).
+        */
+        #mengenal-cosplay {
+            scroll-margin-top: 100px; 
+        }
+
+        /* Penjelasan: Mengatur section deskripsi utama. Secara bawaan menggunakan display: flex 
+           yang menyejajarkan media visual (sisi kiri) dan teks penjelasan (sisi kanan) berdampingan secara horizontal dengan jarak antar kolom 50px.
+        */
+        .contest-section {
+            background: transparent; 
+            border: none; 
+            border-radius: 0;
+            padding: 20px 0; 
+            margin-top: 20px;
+            margin-bottom: 50px;
+            display: flex;
+            gap: 50px; 
+            align-items: center;
+        }
+
+        .contest-visual {
+            flex: 1;
+            max-width: 460px; 
+            min-width: 280px;
+            width: 100%;
+        }
+
+        /* Kotak pembungkus foto yang bersih tanpa background & border */
+        /* Penjelasan: Wadah penampung gambar poster profil. Menggunakan aspect-ratio: 3 / 4 
+           untuk mengunci proporsi kotak agar selalu berbentuk persegi panjang vertikal (portrait ratio) yang presisi.
+        */
+        .photo-box-special {
+            background: transparent; 
+            padding: 0; 
+            border-radius: 0;
+            box-shadow: none; 
+            width: 100%;
+            aspect-ratio: 3 / 4; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-box-special:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Penjelasan: Pengaturan gambar di dalam wadah khusus. object-fit: cover memotong tepi gambar secara otomatis 
+           supaya penuh mengisi kotak, dan object-position: top center memprioritaskan area atas (seperti wajah tokoh) agar tidak terpotong.
+        */
+        .photo-box-special img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 12px; 
+            object-fit: cover; 
+            object-position: top center; 
+        }
+
+        .contest-content {
+            flex: 1.5; 
+            text-align: left;
+        }
+
+        /* Penjelasan: Judul "Apa itu Cosplay?". Menggunakan border-bottom berwarna merah muda neon 
+           sebagai garis dekoratif bawah penegas batas konten teks.
+        */
+        .contest-content h3 {
+            color: #fff;
+            font-size: 32px; 
+            margin-bottom: 22px;
+            font-weight: 700;
+            border-bottom: 2px solid #ff007f;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .contest-content p {
+            color: #bfaecf;
+            font-size: 17px; 
+            line-height: 1.8;
+            margin-bottom: 18px;
+        }
+
+        /* Media Query Khusus Penjelasan Cosplay (Layar Maksimal 968px) */
+        /* Penjelasan: Ketika ukuran layar mengecil di bawah 968px, display flex diubah arahnya menjadi 
+           flex-direction: column. Efeknya, tata letak gambar yang tadinya di sebelah kiri akan otomatis pindah 
+           ke atas teks (tersusun vertikal bawah-atas), dan teks rata kiri berubah menjadi rata tengah (center).
+        */
+        @media (max-width: 968px) {
+            .contest-section {
+                flex-direction: column;
+                padding: 25px 0;
+                gap: 30px;
+            }
+            .contest-visual {
+                max-width: 380px; 
+            }
+            .contest-content {
+                text-align: center;
+            }
+            .contest-content h3 {
+                font-size: 28px;
+            }
+            .contest-content p {
+                font-size: 16px;
+            }
+        }
+
+        /* ==========================================================================
+           5. STYLE LIST JADWAL & AGENDA EVENT (EVENT TIMELINE STYLE)
+           ========================================================================== */
+        /* Penjelasan: .event-container mengatur pembungkus seluruh daftar agenda secara vertikal ke bawah dengan gap 20px. */
+        .event-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        /* Penjelasan: .event-card menyusun baris bar tiket/acara. display: flex menaruh tanggal di kiri 
+           dan deskripsi info acara di kanan. border-left-color memberikan aksen warna penanda vertikal tebal di sisi paling kiri kartu.
+        */
+        .event-card {
+            display: flex;
+            background: #160f24;
+            border: 1px solid #3d1e5a;
+            border-left: 5px solid #ff007f; 
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Penjelasan: Animasi geser ke kanan sedikit (translateX(5px)) ketika baris event didekati kursor mouse. */
+        .event-card:hover {
+            border-color: #00f0ff;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+            transform: translateX(5px); 
+        }
+
+        /* Penjelasan: Memisahkan bagian blok tanggal dengan detail teks utama menggunakan batas garis putus-putus (border-right: 2px dashed). */
+        .event-date {
+            min-width: 100px;
+            text-align: center;
+            border-right: 2px dashed #3d1e5a;
+            padding-right: 20px;
+            margin-right: 20px;
+        }
+
+        .event-date .day {
+            font-size: 28px;
+            font-weight: 800;
+            color: #00f0ff;
+            display: block;
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+        }
+
+        .event-date .month {
+            font-size: 14px;
+            text-transform: uppercase;
+            color: #bfaecf;
+            letter-spacing: 1px;
+        }
+
+        .event-details {
+            flex: 1;
+            text-align: left;
+        }
+
+        .event-details h3 {
+            color: #fff;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .event-details p {
+            color: #a594b8;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .event-details .location {
+            color: #ff007f;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        /* Media Query List Event (Layar Maksimal 600px) */
+        /* Penjelasan: Mengubah susunan baris event menjadi tumpukan vertikal terpusat pada layar handphone kecil. 
+           Garis pemisah putus-putus vertikal diputar orientasinya menjadi horizontal di bawah angka tanggal (border-bottom).
+        */
+        @media (max-width: 600px) {
+            .event-card {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+            .event-date {
+                border-right: none;
+                border-bottom: 2px dashed #3d1e5a;
+                padding-right: 0;
+                padding-bottom: 15px;
+                margin-right: 0;
+                margin-bottom: 15px;
+                width: 100%;
+            }
+            .event-details {
+                text-align: center;
+                margin-bottom: 15px;
+            }
+        }
+
+        /* ==========================================================================
+           6. UTILITAS JARAK KHUSUS LAYOUT BAGIAN BAWAH (SECTION GAP & TYPOGRAPHY)
+           ========================================================================== */
+        /* Penjelasan: Kelas utilitas universal untuk memberikan ruang pemisah vertikal antar bab bagian konten situs. */
+        .section-gap {
+            padding-top: 80px;  /* Memberikan jarak atas yang pas */
+            padding-bottom: 40px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .section-gap {
+                padding-top: 50px;
+                padding-bottom: 30px;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">Nexa<span>Verse</span></div>
+            <nav>
+                <ul>
+                    <li><a href="homepage.html">Home</a></li>
+                    <li><a href="animepage.html">Anime</a></li>
+                    <li><a href="gamerspage.html">Gamers</a></li>
+                    <li><a href="cosplaypage.html" class="active">Cosplay</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-cosplay">
+        <h1>Wujudkan Karakter Impianmu</h1>
+        <p class="hero-text">
+            Selamat datang di NexaVerse Cosplay, wadah kreativitas tanpa batas untuk para cosplayer dan pencinta jejepangan di Indonesia. Bagikan karyamu, temukan pengalaman baru, dan kembangkan keahlianmu dari tingkat dasar hingga panggung internasional.
+        </p>
+        <a href="#mengenal-cosplay" class="btn">Mengenal Cosplay</a>
+    </section>
+
+    <div class="hero-border-sticky"></div>
+
+    <div class="container" id="mengenal-cosplay">
+        <div class="contest-section">
+            <div class="contest-visual">
+                <div class="photo-box-special">
+                    <img src="cosplay/rem.jpg" alt="Ekspresi Seni Cosplay">
+                </div>
+            </div>
+            <div class="contest-content">
+                <h3>Apa itu Cosplay?</h3>
+                <p>
+                    <strong>Cosplay</strong> (gabungan dari kata <em>"costume"</em> dan <em>"play"</em>) adalah istilah bahasa Jepang (diucapkan sebagai <i>kosupure</i>) untuk hobi mengenakan pakaian, aksesori, dan riasan wajah agar menyerupai karakter spesifik dari anime, manga, video game, film, maupun fiksi ilmiah.
+                </p>
+                <p>
+                    Lebih dari sekadar berdandan, seorang praktisi cosplay—yang disebut sebagai <strong>cosplayer</strong>—juga berusaha menghidupkan karakter tersebut dengan meniru gestur tubuh, ekspresi wajah, performa panggung, hingga karakteristik khas penjiwaan mereka saat berada di ruang publik atau festival komunitas.
+                </p>
+                <p>
+                    Kini, cosplay telah bertransformasi dari sekadar subkultur menjadi industri kreatif global. Hobi ini menggabungkan berbagai macam disiplin keahlian seni, mulai dari teknik menjahit tekstil, pembuatan properti (*prop making*) menggunakan material busa hati, aplikasi tata rias efek khusus (*FX makeup*), hingga seni pertunjukan panggung.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container section-gap" id="tingkatan">
+        <h2 class="section-title">3 Tingkatan Kemahiran Cosplay</h2>
+        <p style="text-align: center; color: #bfaecf; margin-bottom: 40px;">Di sini kamu bisa tahu berada di tingkatan mana keahlianmu dalam dunia cosplay!</p>
+        
+        <div class="card-container">
+            <div class="card">
+                <div class="card-content">
+                    <span class="level-badge bg-novice">Tingkat 1: Novice</span>
+                    <h3>The Enthusiast</h3>
+                    <p>Baru memulai perjalanan cosplay. Fokus pada kostum kasual, menggunakan kostum siap pakai (ready-to-wear), dan aktif meramaikan event/festival lokal untuk mencari pengalaman.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-content">
+                    <span class="level-badge bg-craftsman">Tingkat 2: Craftsman</span>
+                    <h3>The Maker</h3>
+                    <p>Sudah mulai merakit armor, menjahit pakaian sendiri, atau memodifikasi wig secara mandiri. Memiliki pemahaman detail mengenai make-up karakter dan prop-making dasar.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-content">
+                    <span class="level-badge bg-elite">Tingkat 3: Elite</span>
+                    <h3>The Performer</h3>
+                    <p>Tingkat mahir yang menguasai panggung, berpengalaman mengikuti kompetisi nasional/internasional, akting panggung (skit) yang memukau, serta kualitas pembuatan kostum tingkat tinggi.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container section-gap" id="showcase">
+        <h2 class="section-title">Cosplayer Showcase</h2>
+        <p style="text-align: center; color: #bfaecf; margin-bottom: 40px;">Karya kreatif terbaik dan inspiratif dari komunitas NexaVerse.</p>
+        
+        <div class="cosplay-grid">
+            <div class="cosplay-item">
+                <div class="cosplay-img" style="background-image: url('cosplay/cyber.jpg');"></div>
+                <div class="cosplay-info">
+                    <h4>Cyber Ninja Cosplay</h4>
+                    <p>Oleh: Nexa_CosCraft</p>
+                </div>
+            </div>
+
+            <div class="cosplay-item">
+                <div class="cosplay-img" style="background-image: url('cosplay/mage.jpg'); background-position: top; background-size: cover;"></div>
+                <div class="cosplay-info">
+                    <h4>Anime Fantasy Mage</h4>
+                    <p>Oleh: Rei_Chrono</p>
+                </div>
+            </div>
+
+            <div class="cosplay-item">
+                <div class="cosplay-img" style="background-image: url('cosplay/cosplay gundam.jpg'); background-position: top; background-size: cover;"></div>
+                <div class="cosplay-info">
+                    <h4>Mecha Armor Warrior</h4>
+                    <p>Oleh: Kael_Mecha</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container section-gap" id="events">
+        <h2 class="section-title">Upcoming Cosplay Events</h2>
+        <p style="text-align: center; color: #bfaecf; margin-bottom: 40px;">Jangan lewatkan keseruan berkumpul bersama komunitas di event terdekat!</p>
+        
+        <div class="event-container">
+            <div class="event-card">
+                <div class="event-date">
+                    <span class="day">18</span>
+                    <span class="month">Juli</span>
+                </div>
+                <div class="event-details">
+                    <h3>NexaVerse Cosplay Parade 2026</h3>
+                    <p>Kompetisi Cosplay Walk (Coswalk), sesi foto eksklusif komunitas, dan sharing bareng juri profesional.</p>
+                    <span class="location">📍 Nexa Convention Hall, Jakarta</span>
+                </div>
+                <a href="#" class="btn" style="padding: 8px 20px; font-size: 14px; border-radius: 6px;">Daftar</a>
+            </div>
+
+            <div class="event-card" style="border-left-color: #8a2be2;"> 
+                <div class="event-date">
+                    <span class="day">05</span>
+                    <span class="month">Agustus</span>
+                </div>
+                <div class="event-details">
+                    <h3>Prop Making & Crafting Workshop</h3>
+                    <p>Belajar dasar membuat armor busa hati (EVA Foam) dan teknik pewarnaan agar prop terlihat realistis.</p>
+                    <span class="location">📍 Live On Discord & Zoom NexaVerse</span>
+                </div>
+                <a href="#" class="btn" style="padding: 8px 20px; font-size: 14px; border-radius: 6px;">Beli Tiket</a>
+            </div>
+
+            <div class="event-card" style="border-left-color: #00f0ff;"> 
+                <div class="event-date">
+                    <span class="day">22</span>
+                    <span class="month">Agustus</span>
+                </div>
+                <div class="event-details">
+                    <h3>Matsuri Cyber Fest 2026</h3>
+                    <p>Festival budaya Jepang bertema masa depan dengan pertunjukan Anisong, Cosplay Skit, dan Community Gathering.</p>
+                    <span class="location">📍 Cyber Park Area, Bandung</span>
+                </div>
+                <a href="#" class="btn" style="padding: 8px 20px; font-size: 14px; border-radius: 6px;">Info Detail</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 <span>NexaVerse</span> Community. CosplayVerse Section.</p>
+    </footer>
+
+</body>
+</html>
